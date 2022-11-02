@@ -22,4 +22,21 @@ const getUser = catchAsync(async (req, res, next) => {
   }
 });
 
-module.exports = { getUser };
+const getUserId = catchAsync(async (req, res, next) => {
+  try {
+    const response = await User.findOne();
+    endpointResponse({
+      res,
+      message: "User Id succesfully",
+      body: response,
+    });
+  } catch (error) {
+    const httpError = createHttpError(
+      error.statusCode,
+      `[Error retrieving users] - [index - GET]: ${error.message}`
+    );
+    next(httpError);
+  }
+});
+
+module.exports = { getUser, getUserId };
