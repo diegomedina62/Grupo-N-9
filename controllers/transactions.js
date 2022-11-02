@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const createHttpError = require('http-errors')
 const { Transaction, User } = require('../database/models')
-// const { endpointResponse } = require('../helpers/success')
+const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
 
 // post transactions and update transactions
@@ -17,7 +17,13 @@ module.exports = {
         return next(httpError)
       }
 
-      res.json('asdas')
+      const createUser = await Transaction.create(req.body)
+      // eslint-disable-next-line no-undef
+      endpointResponse({
+        res,
+        message: 'Transaction created successfully',
+        body: createUser
+      })
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
