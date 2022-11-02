@@ -1,10 +1,12 @@
-const express = require('express')
-const {
-  get
-} = require('../controllers/users')
 
-const router = express.Router()
+const express = require("express");
+const { getUser } = require("../controllers/users");
 
-router.get('/', get)
 
-module.exports = router
+const router = express.Router();
+
+router.get("/", getUser);
+
+
+module.exports = router;
+
