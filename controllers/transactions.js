@@ -38,17 +38,8 @@ module.exports = {
   put: catchAsync(async (req, res, next) => {
     try {
       const { id } = req.params
-      const userFound = await User.findByPk(id)
 
-      if (!userFound) {
-        const httpError = createHttpError(
-          400,
-              `[Error Update Transactions] - [transaction - UPDATE]: ${"User doesn't exist"}`
-        )
-        return next(httpError)
-      }
-
-      const createUser = await Transaction.update(req.body, {
+      const updateUser = await Transaction.update(req.body, {
         where: {
           id
         }
@@ -57,7 +48,7 @@ module.exports = {
       endpointResponse({
         res,
         message: 'Transaction updated successfully',
-        body: createUser
+        body: updateUser
       })
     } catch (error) {
       const httpError = createHttpError(
