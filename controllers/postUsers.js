@@ -19,18 +19,6 @@ const postUsers = catchAsync(async (req, res, next) => {
   }
 
   try {
-    const existingUser = await User.findOne({ where: { email } })
-
-    if (existingUser !== null) {
-      const errorMessage = 'The user is already registered'
-
-      const httpError = createHttpError(
-        400,
-        `[Error register user] - [index - POST]: ${errorMessage}`
-      )
-      next(httpError)
-    }
-
     const response = await User.create(user)
 
     endpointResponse({
