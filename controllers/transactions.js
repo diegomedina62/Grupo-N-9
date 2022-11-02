@@ -38,6 +38,15 @@ module.exports = {
   put: catchAsync(async (req, res, next) => {
     try {
       const { id } = req.params
+      const userFound = await Transaction.findByPk(id)
+
+      if (!userFound) {
+        const httpError = createHttpError(
+          400,
+              `[Error Update Transactions] - [transaction - UPDATE]: ${"Transaction doesn't exist"}`
+        )
+        return next(httpError)
+      }
 
       const updateUser = await Transaction.update(req.body, {
         where: {
