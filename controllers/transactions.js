@@ -39,9 +39,9 @@ module.exports = {
     try {
       const { user, amount, category, date } = req.body
       const { id } = req.params
-      const userFound = await Transaction.findByPk(id)
+      const transactionFound = await Transaction.findByPk(id)
 
-      if (!userFound) {
+      if (!transactionFound) {
         const httpError = createHttpError(
           400,
               `[Error Update Transactions] - [transaction - UPDATE]: ${"Transaction doesn't exist"}`
