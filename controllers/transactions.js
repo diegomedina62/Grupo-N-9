@@ -1,16 +1,29 @@
 /* eslint-disable no-unused-vars */
 const createHttpError = require('http-errors')
-const Trnsaction = require('../database/models/transaction')
-const { endpointResponse } = require('../helpers/success')
+const { Transaction, User } = require('../database/models')
+// const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
 
 // post transactions and update transactions
 module.exports = {
   post: catchAsync(async (req, res, next) => {
     try {
-      res.json({ message: 'funcionando' })
+      const userFound = await User.findByPk(req.body.user)
+      if (!userFound) {
+        const httpError = createHttpError(
+          400,
+            `[Error creating Transactions] - [transaction - POST]: ${"Id of user doesn't exist"}`
+        )
+        return next(httpError)
+      }
+
+      res.json('asdas')
     } catch (error) {
-      res.json({ message: 'no funciona' })
+      const httpError = createHttpError(
+        error.statusCode,
+            `[Error creating Transactions] - [transaction - POST]: ${error.message}`
+      )
+      next(httpError)
     }
   })
 }
