@@ -39,4 +39,15 @@ const getUserId = catchAsync(async (req, res, next) => {
   }
 });
 
-module.exports = { getUser, getUserId };
+const deleteUser = catchAsync(async (req, res, next) => {
+  try {
+  } catch (error) {
+    const httpError = createHttpError(
+      error.statusCode,
+      `[Error retrieving users] - [index - GET]: ${error.message}`
+    );
+    next(httpError);
+  }
+});
+
+module.exports = { getUser, getUserId, deleteUser };
