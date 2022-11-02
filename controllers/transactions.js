@@ -31,5 +31,41 @@ module.exports = {
       )
       next(httpError)
     }
+  }),
+
+  //   update transaction
+
+  put: catchAsync(async (req, res, next) => {
+    try {
+      const { id } = req.params
+      const userFound = await User.findByPk(id)
+
+      if (!userFound) {
+        const httpError = createHttpError(
+          400,
+              `[Error Update Transactions] - [transaction - UPDATE]: ${"User doesn't exist"}`
+        )
+        return next(httpError)
+      }
+
+      const createUser = await Transaction.update(req.body, {
+        where: {
+          id
+        }
+      })
+      // eslint-disable-next-line no-undef
+      endpointResponse({
+        res,
+        message: 'Transaction updated successfully',
+        body: createUser
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+            `[Error updating Transactions] - [transaction - PUT]: ${error.message}`
+      )
+      next(httpError)
+    }
   })
+
 }
