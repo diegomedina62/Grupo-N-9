@@ -4,7 +4,6 @@ const { User } = require('../database/models')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
 
-// example of a controller. First call the service, then build the controller method
 const postUsers = catchAsync(async (req, res, next) => {
   const { firstName, lastName, email, password } = req.body
 
@@ -20,6 +19,18 @@ const postUsers = catchAsync(async (req, res, next) => {
   }
 
   try {
+    const existingUser = await User.findOne({ where: { email } })
+
+    if (existingUser !== null) {
+      const errorMessage = 'The user is already registered'
+
+      const httpError = createHttpError(
+        400,
+        `[Error register user] - [index - POST]: ${errorMessage}`
+      )
+      next(httpError)
+    }
+
     const response = await User.create(user)
 
     endpointResponse({
