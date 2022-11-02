@@ -8,7 +8,8 @@ const { catchAsync } = require('../helpers/catchAsync')
 module.exports = {
   post: catchAsync(async (req, res, next) => {
     try {
-      const userFound = await User.findByPk(req.body.user)
+      const { date, amount, user, category } = req.body
+      const userFound = await User.findByPk(user)
       if (!userFound) {
         const httpError = createHttpError(
           400,
@@ -17,7 +18,12 @@ module.exports = {
         return next(httpError)
       }
 
-      const createUser = await Transaction.create(req.body)
+      const createUser = await Transaction.create({
+        date,
+        amount,
+        userId: user,
+        categoryId: category
+      })
       // eslint-disable-next-line no-undef
       endpointResponse({
         res,
