@@ -1,7 +1,7 @@
 const express = require('express')
+const postUsers = require('../controllers/postUsers')
 const {
-  get,
-  postUsers
+  get
 } = require('../controllers/users')
 
 const router = express.Router()
