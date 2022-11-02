@@ -8,6 +8,6 @@ const router = express.Router()
 // example of a route with index controller get function
 router.use('/users', usersRouter)
 
-router.use('/transactions', transactionsRouter)
+router.use('/transactions', TransactionsRouter)
 
 module.exports = router
