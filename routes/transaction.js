@@ -2,6 +2,9 @@ const express = require('express')
 
 const router = express.Router()
 
-router.post('/', (req, res) => { res.json('prueba') })
+// controllers
+const { post } = require('../controllers/transactions')
+
+router.post('/', post)
 
 module.exports = router
