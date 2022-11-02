@@ -37,6 +37,7 @@ module.exports = {
 
   put: catchAsync(async (req, res, next) => {
     try {
+      const { user, amount, category, date } = req.body
       const { id } = req.params
       const userFound = await Transaction.findByPk(id)
 
@@ -48,7 +49,12 @@ module.exports = {
         return next(httpError)
       }
 
-      const updateUser = await Transaction.update(req.body, {
+      const updateUser = await Transaction.update({
+        userId: user,
+        categoryId: category,
+        amount,
+        date
+      }, {
         where: {
           id
         }
