@@ -11,14 +11,14 @@ module.exports = {
       endpointResponse({
         res,
         message: 'Users retrieved successfully',
-        body: response,
+        body: response
       })
     } catch (error) {
       const httpError = createHttpError(
         error.statusCode,
-        `[Error retrieving users] - [index - GET]: ${error.message}`,
+        `[Error retrieving users] - [index - GET]: ${error.message}`
       )
       next(httpError)
     }
-  }),
+  })
 }
