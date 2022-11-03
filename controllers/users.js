@@ -1,3 +1,4 @@
+
 const createHttpError = require('http-errors')
 const bcryptjs = require('bcryptjs')
 
@@ -67,6 +68,7 @@ const postUsers = catchAsync(async (req, res, next) => {
     const httpError = createHttpError(
       error.statusCode,
       `[Error retrieving users] - [index - GET]: ${error.message}`
+
     )
     next(httpError)
   }
@@ -76,4 +78,6 @@ module.exports = {
   getUser,
   getUserId,
   postUsers
+
 }
+
