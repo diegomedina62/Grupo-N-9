@@ -131,7 +131,7 @@ const deleteTransaction = catchAsync(async (req, res, next) => {
 
             endpointResponse({
                 res,
-                message: 'User Id succesfully',
+                message: 'Delete transaction succesfully',
                 body: response,
             });
         }
