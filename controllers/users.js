@@ -42,7 +42,7 @@ const getUserId = catchAsync(async (req, res, next) => {
 const deleteUser = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   try {
-    const response = await User.destroy({ where: { id } });
+    await User.destroy({ where: { id } });
     endpointResponse({
       res,
       message: "User Id succesfully",
