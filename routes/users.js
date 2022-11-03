@@ -4,7 +4,8 @@ const express = require('express')
 const {
   getUser,
   getUserId,
-  postUsers
+  postUsers,
+  putUsers
 } = require('../controllers/users')
 
 const checkEmailUsers = require('../middlewares/checkEmailUsers')
@@ -16,5 +17,6 @@ router.get('/', getUser)
 router.get('/:id', checkIdUsers, getUserId)
 
 router.post('/', checkEmailUsers, postUsers)
+router.put('/:id', checkIdUsers, putUsers)
 
 module.exports = router
