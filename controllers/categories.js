@@ -30,5 +30,19 @@ const createCategory = catchAsync(async (req, res, next) => {
     }
   });
 
+const getCategory = catchAsync(async(req, res, next) => {
+  try {
+    
 
-  module.exports = {createCategory}
+    endpointResponse({
+      res,
+      message: "obtain category data",
+      body: category,
+    });
+  } catch (error) {
+    
+  }
+})
+
+
+  module.exports = {createCategory, getCategory}
