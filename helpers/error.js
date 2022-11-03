@@ -1,6 +1,6 @@
 class ErrorObject extends Error {
-  constructor(message, statusCode, errors = []) {
-/* The above code is creating a new class called AppError. This class is a child of the Error class.
+  constructor (message, statusCode, errors = []) {
+    /* The above code is creating a new class called AppError. This class is a child of the Error class.
 The constructor function is called when a new instance of the class is created. The constructor
 function takes in a message, statusCode, status, isOperational, and errors. The message, statusCode,
 and errors are passed in as parameters. The status is set to 'fail' if the statusCode starts with a
@@ -19,5 +19,5 @@ Error.captureStackTrace(this, this.constructor */
 }
 
 module.exports = {
-  ErrorObject,
+  ErrorObject
 }

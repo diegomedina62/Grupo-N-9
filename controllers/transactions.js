@@ -38,5 +38,39 @@ const getTransactionById = catchAsync(async (req, res, next) => {
   }
 })
 
+const createTransaction = catchAsync(async (req, res, next) => {
+    try {
+      const { date, amount, user, category } = req.body
+      const userFound = await User.findByPk(user)
+      if (!userFound) {
+        const httpError = createHttpError(
+          400,
+            `[Error creating Transactions] - [transaction - POST]: ${"Id of user doesn't exist"}`
+        )
+        return next(httpError)
+      }
+
+      const createUser = await Transaction.create({
+        date,
+        amount,
+        userId: user,
+        categoryId: category
+      })
+      // eslint-disable-next-line no-undef
+      endpointResponse({
+        res,
+        message: 'Transaction created successfully',
+        body: createUser
+      })
+    } catch (error) {
+      const httpError = createHttpError(
+        error.statusCode,
+            `[Error creating Transactions] - [transaction - POST]: ${error.message}`
+      )
+      next(httpError)
+    }
+  })
+
 // example of a controller. First call the service, then build the controller method
-module.exports = { getTransaction, getTransactionById }
+module.exports = { getTransaction, getTransactionById, createTransaction }
+
