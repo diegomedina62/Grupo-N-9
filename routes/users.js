@@ -1,4 +1,3 @@
-
 const express = require('express')
 
 const {
@@ -19,4 +18,10 @@ router.get('/:id', checkId, getUserId)
 router.post('/', checkEmail, postUsers)
 
 
-module.exports = router
+const router = express.Router();
+
+router.get("/", getUser);
+
+
+module.exports = router;
+
