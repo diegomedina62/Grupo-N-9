@@ -47,5 +47,24 @@ const createCategory = catchAsync(async (req, res, next) => {
     }
   });
 
+const getCategoryById = catchAsync(async(req, res, next) => {
+  try {
+    const {id} = req.params
+    const category = await Category.findByPk(id)
+    endpointResponse({
+      res,
+      message: "obtain category data",
+      body: category,
+    });
+  } catch (error) {
+    const httpError = createHttpError(
+      error.statusCode,
+      `[Error retrieving categories] - [index - GET]: ${error.message}`
+    );
+    next(httpError)
+  }
+})
 
-  module.exports = {createCategory,getCategories}
+
+
+  module.exports = {createCategory, getCategoryById,getCategories}
