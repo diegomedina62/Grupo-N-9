@@ -1,26 +1,23 @@
 const express = require('express')
 
 const {
-
   getUser,
   getUserId,
   postUsers,
+  putUsers,
   deleteUser
-
 } = require('../controllers/users')
 
-const checkEmail = require('../middlewares/checkEmail')
-const checkId = require('../middlewares/checkId')
+const checkEmailUsers = require('../middlewares/checkEmailUsers')
+const checkIdUsers = require('../middlewares/checkIdUsers')
 
 const router = express.Router()
 
 router.get('/', getUser)
-router.get('/:id', checkId, getUserId)
-router.post('/', checkEmail, postUsers)
-router.delete("/:id", deleteUser);
+router.get('/:id', checkIdUsers, getUserId)
 
+router.post('/', checkEmailUsers, postUsers)
+router.put('/:id', checkIdUsers, putUsers)
+router.delete('/:id', checkIdUsers, deleteUser)
 
-
-
-module.exports = router;
-
+module.exports = router
