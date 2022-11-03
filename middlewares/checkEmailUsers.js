@@ -1,7 +1,7 @@
 const createHttpError = require('http-errors')
 const { User } = require('../database/models')
 
-const checkEmail = async (req, res, next) => {
+const checkEmailUsers = async (req, res, next) => {
   const { email } = req.body
   const existingUser = await User.findOne({ where: { email } })
 
@@ -17,4 +17,4 @@ const checkEmail = async (req, res, next) => {
   next()
 }
 
-module.exports = checkEmail
+module.exports = checkEmailUsers
