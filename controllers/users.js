@@ -72,8 +72,25 @@ const postUsers = catchAsync(async (req, res, next) => {
   }
 })
 
+const putUsers = catchAsync(async (req, res, next) => {
+  try {
+    endpointResponse({
+      res,
+      message: 'Desde postUsers',
+      body: []
+    })
+  } catch (error) {
+    const httpError = createHttpError(
+      error.statusCode,
+      `[Error retrieving users] - [index - GET]: ${error.message}`
+    )
+    next(httpError)
+  }
+})
+
 module.exports = {
   getUser,
   getUserId,
-  postUsers
+  postUsers,
+  putUsers
 }
