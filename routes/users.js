@@ -1,8 +1,20 @@
-const express = require("express");
-const { getUser } = require("../controllers/users");
 
-const router = express.Router();
+const express = require('express')
 
-router.get("/", getUser);
+const {
+  getUser,
+  getUserId,
+  postUsers
+} = require('../controllers/users')
 
-module.exports = router;
+const checkEmail = require('../middlewares/checkEmail')
+const checkId = require('../middlewares/checkId')
+
+const router = express.Router()
+
+router.get('/', getUser)
+router.get('/:id', checkId, getUserId)
+
+router.post('/', checkEmail, postUsers)
+
+module.exports = router
