@@ -9,7 +9,7 @@ const checkIdUsers = async (req, res, next) => {
     const errorMessage = 'User ID not found'
 
     const httpError = createHttpError(
-      400,
+      404,
       `[Error register user] - [index - GET]: ${errorMessage}`
     )
     next(httpError)

@@ -60,7 +60,7 @@ const postUsers = catchAsync(async (req, res, next) => {
 
     endpointResponse({
       res,
-      message: 'Desde postUsers',
+      message: 'POST user success',
       body: response
     })
   } catch (error) {
@@ -73,11 +73,18 @@ const postUsers = catchAsync(async (req, res, next) => {
 })
 
 const putUsers = catchAsync(async (req, res, next) => {
+  const { id } = req.params
+  const { ...data } = req.body
+
   try {
+    const user = await User.findByPk(id)
+    user.set(data)
+    await user.save()
+
     endpointResponse({
       res,
-      message: 'Desde postUsers',
-      body: []
+      message: 'PUT user success',
+      body: user
     })
   } catch (error) {
     const httpError = createHttpError(
