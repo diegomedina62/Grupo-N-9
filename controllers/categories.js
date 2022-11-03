@@ -34,7 +34,6 @@ const getCategory = catchAsync(async(req, res, next) => {
   try {
     const {id} = req.params
     const category = await Category.findByPk(id)
-
     endpointResponse({
       res,
       message: "obtain category data",
