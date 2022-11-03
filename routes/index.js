@@ -14,4 +14,3 @@ router.use('/categories', categoriesRouter)
 
 
 module.exports = router
-
