@@ -18,10 +18,5 @@ router.get('/:id', checkId, getUserId)
 router.post('/', checkEmail, postUsers)
 
 
-const router = express.Router();
-
-router.get("/", getUser);
-
-
 module.exports = router;
 
