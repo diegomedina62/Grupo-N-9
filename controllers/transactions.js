@@ -1,12 +1,44 @@
-/* eslint-disable no-unused-vars */
 const createHttpError = require('http-errors')
-const { Transaction, User } = require('../database/models')
+const { Transaction } = require('../database/models')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
 
-// post transactions and update transactions
-module.exports = {
-  post: catchAsync(async (req, res, next) => {
+const getTransaction = catchAsync(async (req, res, next) => {
+  try {
+    const response = await Transaction.findAll()
+    endpointResponse({
+      res,
+      message: 'Transactions retrieved successfully',
+      body: response
+    })
+  } catch (error) {
+    const httpError = createHttpError(
+      error.statusCode,
+      `[Error retrieving transactions] - [index - GET]: ${error.message}`
+    )
+    next(httpError)
+  }
+})
+
+const getTransactionById = catchAsync(async (req, res, next) => {
+  try {
+    const { id } = req.params
+    const response = await Transaction.findByPk(id)
+    endpointResponse({
+      res,
+      message: 'Transaction retrieved successfully',
+      body: response
+    })
+  } catch (error) {
+    const httpError = createHttpError(
+      error.statusCode,
+      `[Error retrieving transactions] - [index - GET]: ${error.message}`
+    )
+    next(httpError)
+  }
+})
+
+const createTransaction = catchAsync(async (req, res, next) => {
     try {
       const { date, amount, user, category } = req.body
       const userFound = await User.findByPk(user)
@@ -38,4 +70,7 @@ module.exports = {
       next(httpError)
     }
   })
-}
+
+// example of a controller. First call the service, then build the controller method
+module.exports = { getTransaction, getTransactionById, createTransaction }
+
