@@ -17,7 +17,7 @@ const getUser = catchAsync(async (req, res, next) => {
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-      `[Error retrieving users] - [index - GET]: ${error.message}`
+            `[Error retrieving users] - [index - GET]: ${error.message}`
     )
     next(httpError)
   }
@@ -35,7 +35,7 @@ const getUserId = catchAsync(async (req, res, next) => {
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-      `[Error retrieving users] - [index - GET]: ${error.message}`
+            `[Error retrieving users] - [index - GET]: ${error.message}`
     )
     next(httpError)
   }
@@ -66,7 +66,7 @@ const postUsers = catchAsync(async (req, res, next) => {
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-      `[Error retrieving users] - [index - GET]: ${error.message}`
+            `[Error retrieving users] - [index - GET]: ${error.message}`
     )
     next(httpError)
   }
@@ -101,9 +101,28 @@ const putUsers = catchAsync(async (req, res, next) => {
   }
 })
 
+const deleteUser = catchAsync(async (req, res, next) => {
+  const { id } = req.params
+  try {
+    const response = await User.destroy({ where: { id } })
+    endpointResponse({
+      res,
+      message: 'User Id succesfully',
+      body: response
+    })
+  } catch (error) {
+    const httpError = createHttpError(
+      error.statusCode,
+            `[Error retrieving users] - [index - GET]: ${error.message}`
+    )
+    next(httpError)
+  }
+})
+
 module.exports = {
   getUser,
   getUserId,
   postUsers,
-  putUsers
+  putUsers,
+  deleteUser
 }

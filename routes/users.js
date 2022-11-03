@@ -1,11 +1,11 @@
-
 const express = require('express')
 
 const {
   getUser,
   getUserId,
   postUsers,
-  putUsers
+  putUsers,
+  deleteUser
 } = require('../controllers/users')
 
 const checkEmailUsers = require('../middlewares/checkEmailUsers')
@@ -18,5 +18,6 @@ router.get('/:id', checkIdUsers, getUserId)
 
 router.post('/', checkEmailUsers, postUsers)
 router.put('/:id', checkIdUsers, putUsers)
+router.delete('/:id', checkIdUsers, deleteUser)
 
 module.exports = router
