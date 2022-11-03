@@ -7,14 +7,14 @@ const {
   postUsers
 } = require('../controllers/users')
 
-const checkEmail = require('../middlewares/checkEmail')
-const checkId = require('../middlewares/checkId')
+const checkEmailUsers = require('../middlewares/checkEmailUsers')
+const checkIdUsers = require('../middlewares/checkIdUsers')
 
 const router = express.Router()
 
 router.get('/', getUser)
-router.get('/:id', checkId, getUserId)
+router.get('/:id', checkIdUsers, getUserId)
 
-router.post('/', checkEmail, postUsers)
+router.post('/', checkEmailUsers, postUsers)
 
 module.exports = router

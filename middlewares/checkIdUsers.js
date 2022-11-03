@@ -1,7 +1,7 @@
 const createHttpError = require('http-errors')
 const { User } = require('../database/models')
 
-const checkId = async (req, res, next) => {
+const checkIdUsers = async (req, res, next) => {
   const { id } = req.params
   const response = await User.findByPk(id)
 
@@ -17,4 +17,4 @@ const checkId = async (req, res, next) => {
   next()
 }
 
-module.exports = checkId
+module.exports = checkIdUsers
