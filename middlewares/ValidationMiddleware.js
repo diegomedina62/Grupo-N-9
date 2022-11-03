@@ -36,3 +36,5 @@ const ValidationMiddleware = (schema) => {
     },
   ];
 };
+
+module.exports = ValidationMiddleware;
