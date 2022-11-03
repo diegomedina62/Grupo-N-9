@@ -16,13 +16,14 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       description: DataTypes.STRING,
       deletedAt: {
-        type: DataTypes.STRING
+        type: DataTypes.DATE
       }
     },
     {
       sequelize,
       timestamps: true,
-      modelName: 'Role'
+      modelName: 'Role',
+      paranoid: true,
     }
   )
   return Role
