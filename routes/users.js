@@ -1,9 +1,11 @@
 
 const express = require('express')
 
-const getUser = require('../controllers/users')
-const getUserId = require('../controllers/getUserId')
-const postUsers = require('../controllers/postUsers')
+const {
+  getUser,
+  getUserId,
+  postUsers
+} = require('../controllers/users')
 
 const checkEmail = require('../middlewares/checkEmail')
 const checkId = require('../middlewares/checkId')
