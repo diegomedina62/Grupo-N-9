@@ -1,10 +1,26 @@
-const express = require("express");
-const { getUser, getUserId, deleteUser } = require("../controllers/users");
+const express = require('express')
 
-const router = express.Router();
+const {
 
-router.get("/", getUser);
-router.get("/:id", getUserId);
+  getUser,
+  getUserId,
+  postUsers,
+  deleteUser
+
+} = require('../controllers/users')
+
+const checkEmail = require('../middlewares/checkEmail')
+const checkId = require('../middlewares/checkId')
+
+const router = express.Router()
+
+router.get('/', getUser)
+router.get('/:id', checkId, getUserId)
+router.post('/', checkEmail, postUsers)
 router.delete("/:id", deleteUser);
 
+
+
+
 module.exports = router;
+
