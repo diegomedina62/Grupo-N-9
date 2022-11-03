@@ -69,7 +69,7 @@ const createTransaction = catchAsync(async (req, res, next) => {
       )
       next(httpError)
     }
-  }),
+  })
 
   //   update transaction
 
