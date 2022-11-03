@@ -74,7 +74,13 @@ const postUsers = catchAsync(async (req, res, next) => {
 
 const putUsers = catchAsync(async (req, res, next) => {
   const { id } = req.params
+
   const { ...data } = req.body
+
+  if (data.password) {
+    const salt = bcryptjs.genSaltSync()
+    data.password = bcryptjs.hashSync(data.password, salt)
+  }
 
   try {
     const user = await User.findByPk(id)
