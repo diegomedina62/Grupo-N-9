@@ -30,7 +30,7 @@ const createCategory = catchAsync(async (req, res, next) => {
     }
   });
 
-const getCategory = catchAsync(async(req, res, next) => {
+const getCategoryById = catchAsync(async(req, res, next) => {
   try {
     const {id} = req.params
     const category = await Category.findByPk(id)
@@ -49,4 +49,4 @@ const getCategory = catchAsync(async(req, res, next) => {
 })
 
 
-  module.exports = {createCategory, getCategory}
+  module.exports = {createCategory, getCategoryById}
