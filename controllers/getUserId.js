@@ -3,12 +3,13 @@ const { User } = require('../database/models')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
 
-const getUser = catchAsync(async (req, res, next) => {
+const getUserId = catchAsync(async (req, res, next) => {
+  const { id } = req.params
   try {
-    const response = await User.findAll()
+    const response = await User.findByPk(id)
     endpointResponse({
       res,
-      message: 'All users',
+      message: 'User Id succesfully',
       body: response
     })
   } catch (error) {
@@ -20,4 +21,4 @@ const getUser = catchAsync(async (req, res, next) => {
   }
 })
 
-module.exports = getUser
+module.exports = getUserId
