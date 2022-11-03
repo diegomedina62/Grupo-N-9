@@ -1,11 +1,8 @@
 const express = require('express');
+const { getCategories } = require('../controllers/categories');
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-    console.log('Get Categories');
-
-    res.json('Hello!');
-});
+router.get('/', getCategories);
 
 module.exports = router;
