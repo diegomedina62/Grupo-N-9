@@ -32,7 +32,8 @@ const createCategory = catchAsync(async (req, res, next) => {
 
 const getCategory = catchAsync(async(req, res, next) => {
   try {
-    
+    const {id} = req.params
+    const category = await Category.findByPk(id)
 
     endpointResponse({
       res,
@@ -40,7 +41,11 @@ const getCategory = catchAsync(async(req, res, next) => {
       body: category,
     });
   } catch (error) {
-    
+    const httpError = createHttpError(
+      error.statusCode,
+      `[Error retrieving categories] - [index - GET]: ${error.message}`
+    );
+    next(httpError)
   }
 })
 
