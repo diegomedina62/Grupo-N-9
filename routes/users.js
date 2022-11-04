@@ -1,4 +1,6 @@
 const express = require('express')
+const validationMiddleware = require('../middlewares/ValidationMiddleware')
+const userSchemaPOST = require('../schemas/userSchema-Post')
 
 const {
   getUser,
@@ -16,7 +18,7 @@ const router = express.Router()
 router.get('/', getUser)
 router.get('/:id', checkIdUsers, getUserId)
 
-router.post('/', checkEmailUsers, postUsers)
+router.post('/', validationMiddleware(userSchemaPOST), checkEmailUsers, postUsers)
 router.put('/:id', checkIdUsers, putUsers)
 router.delete('/:id', checkIdUsers, deleteUser)
 
