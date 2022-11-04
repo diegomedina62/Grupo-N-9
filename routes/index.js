@@ -12,8 +12,4 @@ router.use("/users", usersRouter);
 router.use('/transactions', transactionsRouter)
 router.use('/categories', categoriesRouter)
 
-
-// router of transaction post and update
-router.use('/transactions', transactionsRouter)
-
 module.exports = router
