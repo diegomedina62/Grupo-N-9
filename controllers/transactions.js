@@ -98,16 +98,36 @@ const editTransaction = catchAsync(async (req, res, next) => {
       return next(httpError)
     }
 
+    const userFound = await User.findByPk(user);
+    if (!userFound) {
+      const httpError = createHttpError(
+        400,
+        `[Error creating Transactions] - [transaction - POST]: ${"Id of user doesn't exist"}`
+      )
+      return next(httpError)
+    }
+
+    const categoryFound = await Category.findByPk(category);
+
+    if(!categoryFound){
+      const httpError = createHttpError(
+        400,
+        `[Error creating Transactions] - [transaction - POST]: ${"Id of category doesn't exist"}`
+      )
+      return next(httpError)
+    }
+
     const updateUser = await Transaction.update({
-      userId: user,
       categoryId: category,
+      userId: user,
+      date,
       amount,
-      date
     }, {
       where: {
         id
       }
     })
+
     // eslint-disable-next-line no-undef
     endpointResponse({
       res,
