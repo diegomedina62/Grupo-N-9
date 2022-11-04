@@ -11,6 +11,8 @@ const checkIdTransaction = async (req, res, next) => {
     const httpError = createHttpError(400, `[Error register transaction] - [index - GET]: ${errorMessage}`)
     next(httpError)
   }
+  req.datoTransaccion = response
+
   next()
 }
 
