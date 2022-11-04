@@ -21,13 +21,15 @@ module.exports = (sequelize, DataTypes) => {
       categoryId: DataTypes.INTEGER,
       date: DataTypes.DATE,
       deletedAt: {
-        type: DataTypes.STRING
+        type: DataTypes.DATE
       }
     },
     {
       sequelize,
       timestamps: true,
-      modelName: 'Transaction'
+      modelName: 'Transaction',
+      paranoid: true,
+
     }
   )
   return Transaction
