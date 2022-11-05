@@ -1,5 +1,7 @@
 const createHttpError = require('http-errors')
-const { Transaction, User } = require('../database/models')
+
+const { Transaction, User, Category } = require('../database/models')
+
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
 
@@ -22,8 +24,9 @@ const getTransaction = catchAsync(async (req, res, next) => {
 
 const getTransactionById = catchAsync(async (req, res, next) => {
   try {
-    const { id } = req.params
-    const response = await Transaction.findByPk(id)
+    // const { id } = req.params
+    // const response = await Transaction.findByPk(id)
+    const response = req.datoTransaccion
     endpointResponse({
       res,
       message: 'Transaction retrieved successfully',
@@ -41,37 +44,46 @@ const getTransactionById = catchAsync(async (req, res, next) => {
 const createTransaction = catchAsync(async (req, res, next) => {
   try {
     const { date, amount, user, category } = req.body
+
     const userFound = await User.findByPk(user)
     if (!userFound) {
       const httpError = createHttpError(
         400,
-                `[Error creating Transactions] - [transaction - POST]: ${"Id of user doesn't exist"}`
+        `[Error creating Transactions] - [transaction - POST]: ${"Id of user doesn't exist"}`
       )
       return next(httpError)
     }
 
-    const createTransaction = await Transaction.create({
-      date,
-      amount,
+    const categoryFound = await Category.findByPk(category)
+
+    if (!categoryFound) {
+      const httpError = createHttpError(
+        400,
+        `[Error creating Transactions] - [transaction - POST]: ${"Id of category doesn't exist"}`
+      )
+      return next(httpError)
+    }
+
+    const createUser = await Transaction.create({
+      categoryId: category,
       userId: user,
-      categoryId: category
+      date,
+      amount
     })
-    // eslint-disable-next-line no-undef
+
     endpointResponse({
       res,
       message: 'Transaction created successfully',
-      body: createTransaction
+      body: createUser
     })
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-            `[Error creating Transactions] - [transaction - POST]: ${error.message}`
+    `[Error creating Transactions] - [transaction - POST]: ${error.message}`
     )
     next(httpError)
   }
 })
-
-//   update transaction
 
 const editTransaction = catchAsync(async (req, res, next) => {
   try {
@@ -82,34 +94,51 @@ const editTransaction = catchAsync(async (req, res, next) => {
     if (!transactionFound) {
       const httpError = createHttpError(
         400,
-                `[Error Update Transactions] - [transaction - UPDATE]: ${"Transaction doesn't exist"}`
+        `[Error Update Transactions] - [transaction - UPDATE]: ${"Transaction doesn't exist"}`
       )
       return next(httpError)
     }
 
-    const updateTransaction = await Transaction.update(
-      {
-        userId: user,
-        categoryId: category,
-        amount,
-        date
-      },
-      {
-        where: {
-          id
-        }
+    const userFound = await User.findByPk(user)
+    if (!userFound) {
+      const httpError = createHttpError(
+        400,
+        `[Error creating Transactions] - [transaction - POST]: ${"Id of user doesn't exist"}`
+      )
+      return next(httpError)
+    }
+
+    const categoryFound = await Category.findByPk(category)
+
+    if (!categoryFound) {
+      const httpError = createHttpError(
+        400,
+        `[Error creating Transactions] - [transaction - POST]: ${"Id of category doesn't exist"}`
+      )
+      return next(httpError)
+    }
+
+    const updateUser = await Transaction.update({
+      categoryId: category,
+      userId: user,
+      date,
+      amount
+    }, {
+      where: {
+        id
       }
-    )
+    })
+
     // eslint-disable-next-line no-undef
     endpointResponse({
       res,
       message: 'Transaction updated successfully',
-      body: updateTransaction
+      body: updateUser
     })
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-            `[Error updating Transactions] - [transaction - PUT]: ${error.message}`
+      `[Error updating Transactions] - [transaction - PUT]: ${error.message}`
     )
     next(httpError)
   }
@@ -144,5 +173,4 @@ const deleteTransaction = catchAsync(async (req, res, next) => {
   }
 })
 
-// example of a controller. First call the service, then build the controller method
 module.exports = { getTransaction, getTransactionById, createTransaction, editTransaction, deleteTransaction }
