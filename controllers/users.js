@@ -1,4 +1,3 @@
-
 const createHttpError = require('http-errors')
 const bcryptjs = require('bcryptjs')
 
@@ -18,7 +17,7 @@ const getUser = catchAsync(async (req, res, next) => {
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-      `[Error retrieving users] - [index - GET]: ${error.message}`
+            `[Error retrieving users] - [index - GET]: ${error.message}`
     )
     next(httpError)
   }
@@ -36,7 +35,7 @@ const getUserId = catchAsync(async (req, res, next) => {
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-      `[Error retrieving users] - [index - GET]: ${error.message}`
+            `[Error retrieving users] - [index - GET]: ${error.message}`
     )
     next(httpError)
   }
@@ -61,14 +60,60 @@ const postUsers = catchAsync(async (req, res, next) => {
 
     endpointResponse({
       res,
-      message: 'Desde postUsers',
+      message: 'POST user success',
       body: response
     })
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-      `[Error retrieving users] - [index - GET]: ${error.message}`
+            `[Error retrieving users] - [index - GET]: ${error.message}`
+    )
+    next(httpError)
+  }
+})
 
+const putUsers = catchAsync(async (req, res, next) => {
+  const { id } = req.params
+
+  const { ...data } = req.body
+
+  if (data.password) {
+    const salt = bcryptjs.genSaltSync()
+    data.password = bcryptjs.hashSync(data.password, salt)
+  }
+
+  try {
+    const user = await User.findByPk(id)
+    user.set(data)
+    await user.save()
+
+    endpointResponse({
+      res,
+      message: 'PUT user success',
+      body: user
+    })
+  } catch (error) {
+    const httpError = createHttpError(
+      error.statusCode,
+      `[Error retrieving users] - [index - GET]: ${error.message}`
+    )
+    next(httpError)
+  }
+})
+
+const deleteUser = catchAsync(async (req, res, next) => {
+  const { id } = req.params
+  try {
+    const response = await User.destroy({ where: { id } })
+    endpointResponse({
+      res,
+      message: 'User Id succesfully',
+      body: response
+    })
+  } catch (error) {
+    const httpError = createHttpError(
+      error.statusCode,
+            `[Error retrieving users] - [index - GET]: ${error.message}`
     )
     next(httpError)
   }
@@ -77,7 +122,7 @@ const postUsers = catchAsync(async (req, res, next) => {
 module.exports = {
   getUser,
   getUserId,
-  postUsers
-
+  postUsers,
+  putUsers,
+  deleteUser
 }
-
