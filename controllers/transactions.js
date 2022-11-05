@@ -1,5 +1,7 @@
 const createHttpError = require('http-errors')
+
 const { Transaction, User, Category } = require('../database/models')
+
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
 
@@ -14,7 +16,7 @@ const getTransaction = catchAsync(async (req, res, next) => {
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-      `[Error retrieving transactions] - [index - GET]: ${error.message}`
+            `[Error retrieving transactions] - [index - GET]: ${error.message}`
     )
     next(httpError)
   }
@@ -33,7 +35,7 @@ const getTransactionById = catchAsync(async (req, res, next) => {
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-      `[Error retrieving transactions] - [index - GET]: ${error.message}`
+            `[Error retrieving transactions] - [index - GET]: ${error.message}`
     )
     next(httpError)
   }
@@ -42,6 +44,7 @@ const getTransactionById = catchAsync(async (req, res, next) => {
 const createTransaction = catchAsync(async (req, res, next) => {
   try {
     const { date, amount, user, category } = req.body
+
     const userFound = await User.findByPk(user)
     if (!userFound) {
       const httpError = createHttpError(
@@ -67,7 +70,7 @@ const createTransaction = catchAsync(async (req, res, next) => {
       date,
       amount
     })
-    // eslint-disable-next-line no-undef
+
     endpointResponse({
       res,
       message: 'Transaction created successfully',
@@ -76,13 +79,11 @@ const createTransaction = catchAsync(async (req, res, next) => {
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-      `[Error creating Transactions] - [transaction - POST]: ${error.message}`
+    `[Error creating Transactions] - [transaction - POST]: ${error.message}`
     )
     next(httpError)
   }
 })
-
-//   update transaction
 
 const editTransaction = catchAsync(async (req, res, next) => {
   try {
@@ -143,5 +144,33 @@ const editTransaction = catchAsync(async (req, res, next) => {
   }
 })
 
-// example of a controller. First call the service, then build the controller method
-module.exports = { getTransaction, getTransactionById, createTransaction, editTransaction }
+const deleteTransaction = catchAsync(async (req, res, next) => {
+  const { id } = req.params
+  try {
+    const response = await Transaction.findByPk(id)
+
+    if (!response) {
+      const httpError = createHttpError(
+        404,
+                `[Error deleting Transactions] - [transaction - DELETE]: User with ID '${id}' doesn't exist or it's disabled`
+      )
+      res.status(404).json(httpError)
+    } else {
+      response.destroy()
+
+      endpointResponse({
+        res,
+        message: 'Delete transaction succesfully',
+        body: response
+      })
+    }
+  } catch (error) {
+    const httpError = createHttpError(
+      error.statusCode,
+            `[Error deleting Transaction] - [index - DELETE]: ${error.message}`
+    )
+    next(httpError)
+  }
+})
+
+module.exports = { getTransaction, getTransactionById, createTransaction, editTransaction, deleteTransaction }
