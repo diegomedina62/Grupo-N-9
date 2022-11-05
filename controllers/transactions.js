@@ -1,7 +1,7 @@
 const createHttpError = require('http-errors')
-const { Transaction, User, Category} = require('../database/models')
+const { Transaction, User, Category } = require('../database/models')
 const { endpointResponse } = require('../helpers/success')
-const { catchAsync } = require('../helpers/catchAsync');
+const { catchAsync } = require('../helpers/catchAsync')
 
 const getTransaction = catchAsync(async (req, res, next) => {
   try {
@@ -42,7 +42,7 @@ const getTransactionById = catchAsync(async (req, res, next) => {
 const createTransaction = catchAsync(async (req, res, next) => {
   try {
     const { date, amount, user, category } = req.body
-    const userFound = await User.findByPk(user);
+    const userFound = await User.findByPk(user)
     if (!userFound) {
       const httpError = createHttpError(
         400,
@@ -51,9 +51,9 @@ const createTransaction = catchAsync(async (req, res, next) => {
       return next(httpError)
     }
 
-    const categoryFound = await Category.findByPk(category);
+    const categoryFound = await Category.findByPk(category)
 
-    if(!categoryFound){
+    if (!categoryFound) {
       const httpError = createHttpError(
         400,
         `[Error creating Transactions] - [transaction - POST]: ${"Id of category doesn't exist"}`
@@ -65,7 +65,7 @@ const createTransaction = catchAsync(async (req, res, next) => {
       categoryId: category,
       userId: user,
       date,
-      amount,
+      amount
     })
     // eslint-disable-next-line no-undef
     endpointResponse({
@@ -98,7 +98,7 @@ const editTransaction = catchAsync(async (req, res, next) => {
       return next(httpError)
     }
 
-    const userFound = await User.findByPk(user);
+    const userFound = await User.findByPk(user)
     if (!userFound) {
       const httpError = createHttpError(
         400,
@@ -107,9 +107,9 @@ const editTransaction = catchAsync(async (req, res, next) => {
       return next(httpError)
     }
 
-    const categoryFound = await Category.findByPk(category);
+    const categoryFound = await Category.findByPk(category)
 
-    if(!categoryFound){
+    if (!categoryFound) {
       const httpError = createHttpError(
         400,
         `[Error creating Transactions] - [transaction - POST]: ${"Id of category doesn't exist"}`
@@ -121,7 +121,7 @@ const editTransaction = catchAsync(async (req, res, next) => {
       categoryId: category,
       userId: user,
       date,
-      amount,
+      amount
     }, {
       where: {
         id
