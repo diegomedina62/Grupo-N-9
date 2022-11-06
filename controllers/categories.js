@@ -14,7 +14,7 @@ const getCategories = catchAsync(async (req, res, next) => {
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-            `[Error retrieving categories] - [index - GET]: ${error.message}`
+      `[Error retrieving categories] - [index - POST]: ${error.message}`
     )
     next(httpError)
   }
