@@ -90,37 +90,34 @@ const createTransaction = catchAsync(async (req, res, next) => {
 const editTransaction = catchAsync(async (req, res, next) => {
   try {
     const { user, amount, category, date } = req.body
+
     const { id } = req.params
-    const transactionFound = await Transaction.findByPk(id)
 
-    if (!transactionFound) {
-      const httpError = createHttpError(
-        400,
-        `[Error Update Transactions] - [transaction - UPDATE]: ${"Transaction doesn't exist"}`
-      )
-      return next(httpError)
+     let schema = {
+      where: {
+        id: id
+      }
     }
 
-    const userFound = await User.findByPk(user)
-    if (!userFound) {
-      const httpError = createHttpError(
-        400,
-        `[Error creating Transactions] - [transaction - POST]: ${"Id of user doesn't exist"}`
-      )
-      return next(httpError)
-    }
+    await validationDb(schema, Transaction, true)
+    
 
-    const categoryFound = await Category.findByPk(category)
+  // found if the id user exist
+   
+    schema.where.id = user
 
-    if (!categoryFound) {
-      const httpError = createHttpError(
-        400,
-        `[Error creating Transactions] - [transaction - POST]: ${"Id of category doesn't exist"}`
-      )
-      return next(httpError)
-    }
+    await validationDb(schema, User, true)
 
-    const updateUser = await Transaction.update({
+    // found if the id category exist
+
+    schema.where.id = category
+
+    await validationDb(schema, Category, true)
+
+
+
+
+    await Transaction.update({
       categoryId: category,
       userId: user,
       date,
@@ -135,7 +132,6 @@ const editTransaction = catchAsync(async (req, res, next) => {
     endpointResponse({
       res,
       message: 'Transaction updated successfully',
-      body: updateUser
     })
   } catch (error) {
     const httpError = createHttpError(
