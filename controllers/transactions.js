@@ -50,24 +50,21 @@ const createTransaction = catchAsync(async (req, res, next) => {
   try {
     const { date, amount, user, category } = req.body
 
-    const userFound = await User.findByPk(user)
-    if (!userFound) {
-      const httpError = createHttpError(
-        400,
-        `[Error creating Transactions] - [transaction - POST]: ${"Id of user doesn't exist"}`
-      )
-      return next(httpError)
+    let schema = {
+      where: {
+        id: user
+      }
     }
 
-    const categoryFound = await Category.findByPk(category)
+  // found if the id user exist
 
-    if (!categoryFound) {
-      const httpError = createHttpError(
-        400,
-        `[Error creating Transactions] - [transaction - POST]: ${"Id of category doesn't exist"}`
-      )
-      return next(httpError)
-    }
+    await validationDb(schema, User, true)
+    
+    schema.where.id = category
+
+    // found if the id category exist
+
+    await validationDb(schema, Category, true)
 
     const createUser = await Transaction.create({
       categoryId: category,
