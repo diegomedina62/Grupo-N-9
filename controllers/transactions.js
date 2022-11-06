@@ -3,6 +3,7 @@ const createHttpError = require('http-errors')
 const { Transaction, User, Category } = require('../database/models')
 
 const { endpointResponse } = require('../helpers/success')
+const validationDb = require('../helpers/validationDb')
 const { catchAsync } = require('../helpers/catchAsync')
 
 const getTransaction = catchAsync(async (req, res, next) => {
@@ -24,9 +25,13 @@ const getTransaction = catchAsync(async (req, res, next) => {
 
 const getTransactionById = catchAsync(async (req, res, next) => {
   try {
-    // const { id } = req.params
-    // const response = await Transaction.findByPk(id)
-    const response = req.datoTransaccion
+    const { id } = req.params
+    const schema = {
+      where: {
+        id: id
+      }
+    }
+    const response = await validationDb(schema, Transaction, true)
     endpointResponse({
       res,
       message: 'Transaction retrieved successfully',
