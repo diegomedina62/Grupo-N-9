@@ -8,16 +8,12 @@ const {
   deleteUser
 } = require('../controllers/users')
 
-const checkEmailUsers = require('../middlewares/checkEmailUsers')
-const checkIdUsers = require('../middlewares/checkIdUsers')
-
 const router = express.Router()
 
 router.get('/', getUser)
-router.get('/:id', checkIdUsers, getUserId)
-
-router.post('/', checkEmailUsers, postUsers)
-router.put('/:id', checkIdUsers, putUsers)
-router.delete('/:id', checkIdUsers, deleteUser)
+router.get('/:id', getUserId)
+router.post('/', postUsers)
+router.put('/:id', putUsers)
+router.delete('/:id', deleteUser)
 
 module.exports = router
