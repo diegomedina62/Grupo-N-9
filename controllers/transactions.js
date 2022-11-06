@@ -145,15 +145,16 @@ const editTransaction = catchAsync(async (req, res, next) => {
 const deleteTransaction = catchAsync(async (req, res, next) => {
   const { id } = req.params
   try {
-    const response = await Transaction.findByPk(id)
+    let schema = {
+      where: {
+        id: id
+      }
+    }
 
-    if (!response) {
-      const httpError = createHttpError(
-        404,
-                `[Error deleting Transactions] - [transaction - DELETE]: User with ID '${id}' doesn't exist or it's disabled`
-      )
-      res.status(404).json(httpError)
-    } else {
+    const response = await validationDb(schema, Transaction, true)
+ 
+
+   
       response.destroy()
 
       endpointResponse({
@@ -161,7 +162,7 @@ const deleteTransaction = catchAsync(async (req, res, next) => {
         message: 'Delete transaction succesfully',
         body: response
       })
-    }
+    
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
