@@ -50,7 +50,7 @@ const createTransaction = catchAsync(async (req, res, next) => {
   try {
     const { date, amount, user, category } = req.body
 
-    let schema = {
+    const schema = {
       where: {
         id: user
       }
@@ -93,7 +93,7 @@ const editTransaction = catchAsync(async (req, res, next) => {
 
     const { id } = req.params
 
-     let schema = {
+     const schema = {
       where: {
         id: id
       }
@@ -145,7 +145,7 @@ const editTransaction = catchAsync(async (req, res, next) => {
 const deleteTransaction = catchAsync(async (req, res, next) => {
   const { id } = req.params
   try {
-    let schema = {
+    const schema = {
       where: {
         id: id
       }
