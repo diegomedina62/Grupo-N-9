@@ -2,8 +2,11 @@ const createHttpError = require("http-errors");
 
 const { Transaction, User, Category } = require("../database/models");
 
-const { endpointResponse } = require("../helpers/success");
-const { catchAsync } = require("../helpers/catchAsync");
+
+const { endpointResponse } = require('../helpers/success')
+const validationDb = require('../helpers/validationDb')
+const { catchAsync } = require('../helpers/catchAsync')
+
 
 const getTransaction = catchAsync(async (req, res, next) => {
   try {
@@ -24,9 +27,15 @@ const getTransaction = catchAsync(async (req, res, next) => {
 
 const getTransactionById = catchAsync(async (req, res, next) => {
   try {
-    // const { id } = req.params
-    // const response = await Transaction.findByPk(id)
-    const response = req.datoTransaccion;
+
+    const { id } = req.params
+    const schema = {
+      where: {
+        id: id
+      }
+    }
+    const response = await validationDb(schema, Transaction, true)
+
     endpointResponse({
       res,
       message: "Transaction retrieved successfully",
@@ -45,24 +54,23 @@ const createTransaction = catchAsync(async (req, res, next) => {
   try {
     const { date, amount, user, category } = req.body;
 
-    const userFound = await User.findByPk(user);
-    if (!userFound) {
-      const httpError = createHttpError(
-        400,
-        `[Error creating Transactions] - [transaction - POST]: ${"Id of user doesn't exist"}`
-      );
-      return next(httpError);
+
+    const schema = {
+      where: {
+        id: user
+      }
     }
 
-    const categoryFound = await Category.findByPk(category);
+  // found if the id user exist
 
-    if (!categoryFound) {
-      const httpError = createHttpError(
-        400,
-        `[Error creating Transactions] - [transaction - POST]: ${"Id of category doesn't exist"}`
-      );
-      return next(httpError);
-    }
+    await validationDb(schema, User, true)
+    
+    schema.where.id = category
+
+    // found if the id category exist
+
+    await validationDb(schema, Category, true)
+
 
     const createUser = await Transaction.create({
       categoryId: category,
@@ -87,57 +95,54 @@ const createTransaction = catchAsync(async (req, res, next) => {
 
 const editTransaction = catchAsync(async (req, res, next) => {
   try {
-    const { user, amount, category, date } = req.body;
-    const { id } = req.params;
-    const transactionFound = await Transaction.findByPk(id);
 
-    if (!transactionFound) {
-      const httpError = createHttpError(
-        400,
-        `[Error Update Transactions] - [transaction - UPDATE]: ${"Transaction doesn't exist"}`
-      );
-      return next(httpError);
+    const { user, amount, category, date } = req.body
+
+    const { id } = req.params
+
+     const schema = {
+      where: {
+        id: id
+      }
     }
 
-    const userFound = await User.findByPk(user);
-    if (!userFound) {
-      const httpError = createHttpError(
-        400,
-        `[Error creating Transactions] - [transaction - POST]: ${"Id of user doesn't exist"}`
-      );
-      return next(httpError);
-    }
+    await validationDb(schema, Transaction, true)
+    
 
-    const categoryFound = await Category.findByPk(category);
+  // found if the id user exist
+   
+    schema.where.id = user
 
-    if (!categoryFound) {
-      const httpError = createHttpError(
-        400,
-        `[Error creating Transactions] - [transaction - POST]: ${"Id of category doesn't exist"}`
-      );
-      return next(httpError);
-    }
+    await validationDb(schema, User, true)
 
-    const updateUser = await Transaction.update(
-      {
-        categoryId: category,
-        userId: user,
-        date,
-        amount,
-      },
-      {
-        where: {
-          id,
-        },
+    // found if the id category exist
+
+    schema.where.id = category
+
+    await validationDb(schema, Category, true)
+
+
+
+
+    await Transaction.update({
+      categoryId: category,
+      userId: user,
+      date,
+      amount
+    }, {
+      where: {
+        id
+
       }
     );
 
     // eslint-disable-next-line no-undef
     endpointResponse({
       res,
-      message: "Transaction updated successfully",
-      body: updateUser,
-    });
+
+      message: 'Transaction updated successfully',
+    })
+
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
@@ -150,23 +155,26 @@ const editTransaction = catchAsync(async (req, res, next) => {
 const deleteTransaction = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   try {
-    const response = await Transaction.findByPk(id);
 
-    if (!response) {
-      const httpError = createHttpError(
-        404,
-        `[Error deleting Transactions] - [transaction - DELETE]: User with ID '${id}' doesn't exist or it's disabled`
-      );
-      res.status(404).json(httpError);
-    } else {
-      response.destroy();
+    const schema = {
+      where: {
+        id: id
+      }
+    }
+
+    const response = await validationDb(schema, Transaction, true)
+ 
+
+   
+      response.destroy()
 
       endpointResponse({
         res,
-        message: "Delete transaction succesfully",
-        body: response,
-      });
-    }
+        message: 'Delete transaction succesfully',
+        body: response
+      })
+    
+
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
