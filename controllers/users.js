@@ -50,7 +50,6 @@ const getUserId = catchAsync(async (req, res, next) => {
 const postUsers = catchAsync(async (req, res, next) => {
   const { roleId, ...user } = req.body
 
-  console.log(req.files)
   try {
     // Verify that email does not exist in the database
     const schema = { where: { email: user.email } }
