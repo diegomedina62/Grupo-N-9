@@ -6,12 +6,11 @@ const {
   editTransaction,
   deleteTransaction
 } = require('../controllers/transactions')
-const checkIdTransaction = require('../middlewares/checkidtransaction')
 
 const router = express.Router()
 
 router.get('/', getTransaction)
-router.get('/:id', checkIdTransaction, getTransactionById)
+router.get('/:id', getTransactionById)
 router.post('/', createTransaction)
 router.put('/:id', editTransaction)
 router.delete('/:id', deleteTransaction)
