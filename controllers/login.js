@@ -4,7 +4,7 @@ const { catchAsync } = require('../helpers/catchAsync')
 
 const postLogin = catchAsync(async (req, res, next) => {
     try {
-        const response = req.token
+        const response = { token: req.token }
 
         endpointResponse({
             res,
