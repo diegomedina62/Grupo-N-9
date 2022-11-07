@@ -15,12 +15,7 @@ const router = express.Router();
 
 router.get("/", getUser);
 router.get("/:id", getUserId);
-router.post(
-  "/",
-  validationMiddleware(userSchemaPOST),
-
-  postUsers
-);
+router.post("/", validationMiddleware(userSchemaPOST), postUsers);
 router.put("/:id", validationMiddleware(userSchemaPUT), putUsers);
 router.delete("/:id", deleteUser);
 

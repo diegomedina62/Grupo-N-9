@@ -7,7 +7,7 @@ const categoriesSchemaPOST = checkSchema({
     errorMessage: "Enter valid category name",
   },
   description: {
-    isAlphanumeric: {
+    isString: {
       if: (value) => {
         return value !== undefined;
       },
