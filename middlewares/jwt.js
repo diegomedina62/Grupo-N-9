@@ -8,7 +8,6 @@ const jwt = require('jsonwebtoken')
 
 const encode = async (req, res, next) => {
 
-    console.log('Estoy en: Login.signin()');
 
     const { email, password } = req.body;
 
@@ -38,7 +37,6 @@ const decode = async (req, res, next) => {
     }
 
     try {
-        console.log(token)
         const decodificado = jwt.verify(token, process.env.SECRETORPRIVATEKEY);
         req.userid = decodificado.id
     } catch (error) {
