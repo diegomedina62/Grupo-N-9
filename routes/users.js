@@ -11,21 +11,17 @@ const {
   deleteUser,
 } = require("../controllers/users");
 
-const checkEmailUsers = require("../middlewares/checkEmailUsers");
-const checkIdUsers = require("../middlewares/checkIdUsers");
-
 const router = express.Router();
 
 router.get("/", getUser);
-router.get("/:id", checkIdUsers, getUserId);
-
+router.get("/:id", getUserId);
 router.post(
   "/",
   validationMiddleware(userSchemaPOST),
-  checkEmailUsers,
+
   postUsers
 );
-router.put("/:id", validationMiddleware(userSchemaPUT), checkIdUsers, putUsers);
-router.delete("/:id", checkIdUsers, deleteUser);
+router.put("/:id", validationMiddleware(userSchemaPUT), putUsers);
+router.delete("/:id", deleteUser);
 
 module.exports = router;

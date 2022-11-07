@@ -4,6 +4,7 @@ const {
   getTransactionById,
   createTransaction,
   editTransaction,
+  deleteTransaction,
 } = require("../controllers/transactions");
 const checkIdTransaction = require("../middlewares/checkidtransaction");
 const validationMiddleware = require("../middlewares/ValidationMiddleware");
@@ -19,5 +20,6 @@ router.post(
   createTransaction
 );
 router.put("/:id", editTransaction);
+router.delete("/:id", deleteTransaction);
 
 module.exports = router;
