@@ -1,30 +1,33 @@
-const createHttpError = require('http-errors')
+const createHttpError = require("http-errors");
 
-const { Transaction, User, Category } = require('../database/models')
+const { Transaction, User, Category } = require("../database/models");
+
 
 const { endpointResponse } = require('../helpers/success')
 const validationDb = require('../helpers/validationDb')
 const { catchAsync } = require('../helpers/catchAsync')
 
+
 const getTransaction = catchAsync(async (req, res, next) => {
   try {
-    const response = await Transaction.findAll()
+    const response = await Transaction.findAll();
     endpointResponse({
       res,
-      message: 'Transactions retrieved successfully',
-      body: response
-    })
+      message: "Transactions retrieved successfully",
+      body: response,
+    });
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-            `[Error retrieving transactions] - [index - GET]: ${error.message}`
-    )
-    next(httpError)
+      `[Error retrieving transactions] - [index - GET]: ${error.message}`
+    );
+    next(httpError);
   }
-})
+});
 
 const getTransactionById = catchAsync(async (req, res, next) => {
   try {
+
     const { id } = req.params
     const schema = {
       where: {
@@ -32,23 +35,25 @@ const getTransactionById = catchAsync(async (req, res, next) => {
       }
     }
     const response = await validationDb(schema, Transaction, true)
+
     endpointResponse({
       res,
-      message: 'Transaction retrieved successfully',
-      body: response
-    })
+      message: "Transaction retrieved successfully",
+      body: response,
+    });
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-            `[Error retrieving transactions] - [index - GET]: ${error.message}`
-    )
-    next(httpError)
+      `[Error retrieving transactions] - [index - GET]: ${error.message}`
+    );
+    next(httpError);
   }
-})
+});
 
 const createTransaction = catchAsync(async (req, res, next) => {
   try {
-    const { date, amount, user, category } = req.body
+    const { date, amount, user, category } = req.body;
+
 
     const schema = {
       where: {
@@ -66,29 +71,31 @@ const createTransaction = catchAsync(async (req, res, next) => {
 
     await validationDb(schema, Category, true)
 
+
     const createUser = await Transaction.create({
       categoryId: category,
       userId: user,
       date,
-      amount
-    })
+      amount,
+    });
 
     endpointResponse({
       res,
-      message: 'Transaction created successfully',
-      body: createUser
-    })
+      message: "Transaction created successfully",
+      body: createUser,
+    });
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-    `[Error creating Transactions] - [transaction - POST]: ${error.message}`
-    )
-    next(httpError)
+      `[Error creating Transactions] - [transaction - POST]: ${error.message}`
+    );
+    next(httpError);
   }
-})
+});
 
 const editTransaction = catchAsync(async (req, res, next) => {
   try {
+
     const { user, amount, category, date } = req.body
 
     const { id } = req.params
@@ -125,26 +132,30 @@ const editTransaction = catchAsync(async (req, res, next) => {
     }, {
       where: {
         id
+
       }
-    })
+    );
 
     // eslint-disable-next-line no-undef
     endpointResponse({
       res,
+
       message: 'Transaction updated successfully',
     })
+
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
       `[Error updating Transactions] - [transaction - PUT]: ${error.message}`
-    )
-    next(httpError)
+    );
+    next(httpError);
   }
-})
+});
 
 const deleteTransaction = catchAsync(async (req, res, next) => {
-  const { id } = req.params
+  const { id } = req.params;
   try {
+
     const schema = {
       where: {
         id: id
@@ -163,13 +174,20 @@ const deleteTransaction = catchAsync(async (req, res, next) => {
         body: response
       })
     
+
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-            `[Error deleting Transaction] - [index - DELETE]: ${error.message}`
-    )
-    next(httpError)
+      `[Error deleting Transaction] - [index - DELETE]: ${error.message}`
+    );
+    next(httpError);
   }
-})
+});
 
-module.exports = { getTransaction, getTransactionById, createTransaction, editTransaction, deleteTransaction }
+module.exports = {
+  getTransaction,
+  getTransactionById,
+  createTransaction,
+  editTransaction,
+  deleteTransaction,
+};
