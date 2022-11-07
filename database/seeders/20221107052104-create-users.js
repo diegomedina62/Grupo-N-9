@@ -4,12 +4,14 @@ const path = require('path')
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    const users = async () => {
-      const pathJSON = path.join(__dirname, '../../users.json')
-      const data = await fs.readFile(pathJSON, 'utf-8')
-      return data
-    }
+    const pathJSON = path.join(__dirname, '../../users.json')
+    const data = await fs.readFile(pathJSON, 'utf-8')
+    const users = JSON.parse(data)
 
+    users.forEach(data => {
+      data.createdAt = new Date()
+      data.updatedAt = new Date()
+    })
     await queryInterface.bulkInsert('Users', users, {})
   },
 
