@@ -11,21 +11,13 @@ function randomNumber (min, max) {
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     const transactions = []
-    let category = 0
     for (let i = 0; i < 20; i++) {
-      const money = randomNumber(-500, 500)
-      if (money < 0) {
-        category = 2
-      } else {
-        category = 1
-      }
-
       transactions.push({
         description: faker.lorem.sentence(5),
-        amount: money,
+        amount: randomNumber(0, 10000),
         date: faker.date.past(5),
         userId: randomNumber(1, 20),
-        categoryId: category,
+        categoryId: randomNumber(1,2),
         createdAt: new Date(),
         updatedAt: new Date()
       })
