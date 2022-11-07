@@ -1,5 +1,4 @@
 const { checkSchema } = require("express-validator");
-const { options } = require("../routes/users");
 
 const userSchemaPUT = checkSchema({
   id: {
