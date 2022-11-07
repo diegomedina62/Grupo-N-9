@@ -7,6 +7,7 @@ const cors = require('cors')
 require('dotenv').config()
 
 const indexRouter = require('./routes/index')
+const cpUpload = require('./middlewares/uploadFile')
 
 const port = process.env.PORT || 3000
 
@@ -18,6 +19,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(cpUpload)
 
 app.use('/', indexRouter)
 

@@ -1,176 +1,179 @@
-const createHttpError = require('http-errors')
+const createHttpError = require("http-errors");
 
-const { Transaction, User, Category } = require('../database/models')
+const { Transaction, User, Category } = require("../database/models");
 
-const { endpointResponse } = require('../helpers/success')
-const { catchAsync } = require('../helpers/catchAsync')
+const { endpointResponse } = require("../helpers/success");
+const validationDb = require("../helpers/validationDb");
+const { catchAsync } = require("../helpers/catchAsync");
 
 const getTransaction = catchAsync(async (req, res, next) => {
   try {
-    const response = await Transaction.findAll()
+    const response = await Transaction.findAll();
     endpointResponse({
       res,
-      message: 'Transactions retrieved successfully',
-      body: response
-    })
+      message: "Transactions retrieved successfully",
+      body: response,
+    });
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-            `[Error retrieving transactions] - [index - GET]: ${error.message}`
-    )
-    next(httpError)
+      `[Error retrieving transactions] - [index - GET]: ${error.message}`
+    );
+    next(httpError);
   }
-})
+});
 
 const getTransactionById = catchAsync(async (req, res, next) => {
   try {
-    // const { id } = req.params
-    // const response = await Transaction.findByPk(id)
-    const response = req.datoTransaccion
+    const { id } = req.params;
+    const schema = {
+      where: {
+        id: id,
+      },
+    };
+    const response = await validationDb(schema, Transaction, true);
+
     endpointResponse({
       res,
-      message: 'Transaction retrieved successfully',
-      body: response
-    })
+      message: "Transaction retrieved successfully",
+      body: response,
+    });
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-            `[Error retrieving transactions] - [index - GET]: ${error.message}`
-    )
-    next(httpError)
+      `[Error retrieving transactions] - [index - GET]: ${error.message}`
+    );
+    next(httpError);
   }
-})
+});
 
 const createTransaction = catchAsync(async (req, res, next) => {
   try {
-    const { date, amount, user, category } = req.body
+    const { date, amount, user, category } = req.body;
 
-    const userFound = await User.findByPk(user)
-    if (!userFound) {
-      const httpError = createHttpError(
-        400,
-        `[Error creating Transactions] - [transaction - POST]: ${"Id of user doesn't exist"}`
-      )
-      return next(httpError)
-    }
+    const schema = {
+      where: {
+        id: user,
+      },
+    };
 
-    const categoryFound = await Category.findByPk(category)
+    // found if the id user exist
 
-    if (!categoryFound) {
-      const httpError = createHttpError(
-        400,
-        `[Error creating Transactions] - [transaction - POST]: ${"Id of category doesn't exist"}`
-      )
-      return next(httpError)
-    }
+    await validationDb(schema, User, true);
+
+    schema.where.id = category;
+
+    // found if the id category exist
+
+    await validationDb(schema, Category, true);
 
     const createUser = await Transaction.create({
       categoryId: category,
       userId: user,
       date,
-      amount
-    })
+      amount,
+    });
 
     endpointResponse({
       res,
-      message: 'Transaction created successfully',
-      body: createUser
-    })
+      message: "Transaction created successfully",
+      body: createUser,
+    });
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-    `[Error creating Transactions] - [transaction - POST]: ${error.message}`
-    )
-    next(httpError)
+      `[Error creating Transactions] - [transaction - POST]: ${error.message}`
+    );
+    next(httpError);
   }
-})
+});
 
 const editTransaction = catchAsync(async (req, res, next) => {
   try {
-    const { user, amount, category, date } = req.body
-    const { id } = req.params
-    const transactionFound = await Transaction.findByPk(id)
+    const { user, amount, category, date } = req.body;
 
-    if (!transactionFound) {
-      const httpError = createHttpError(
-        400,
-        `[Error Update Transactions] - [transaction - UPDATE]: ${"Transaction doesn't exist"}`
-      )
-      return next(httpError)
-    }
+    const { id } = req.params;
 
-    const userFound = await User.findByPk(user)
-    if (!userFound) {
-      const httpError = createHttpError(
-        400,
-        `[Error creating Transactions] - [transaction - POST]: ${"Id of user doesn't exist"}`
-      )
-      return next(httpError)
-    }
-
-    const categoryFound = await Category.findByPk(category)
-
-    if (!categoryFound) {
-      const httpError = createHttpError(
-        400,
-        `[Error creating Transactions] - [transaction - POST]: ${"Id of category doesn't exist"}`
-      )
-      return next(httpError)
-    }
-
-    const updateUser = await Transaction.update({
-      categoryId: category,
-      userId: user,
-      date,
-      amount
-    }, {
+    const schema = {
       where: {
-        id
+        id: id,
+      },
+    };
+
+    await validationDb(schema, Transaction, true);
+
+    // found if the id user exist
+
+    schema.where.id = user;
+
+    await validationDb(schema, User, true);
+
+    // found if the id category exist
+
+    schema.where.id = category;
+
+    await validationDb(schema, Category, true);
+
+    await Transaction.update(
+      {
+        categoryId: category,
+        userId: user,
+        date,
+        amount,
+      },
+      {
+        where: {
+          id,
+        },
       }
-    })
+    );
 
     // eslint-disable-next-line no-undef
     endpointResponse({
       res,
-      message: 'Transaction updated successfully',
-      body: updateUser
-    })
+
+      message: "Transaction updated successfully",
+    });
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
       `[Error updating Transactions] - [transaction - PUT]: ${error.message}`
-    )
-    next(httpError)
+    );
+    next(httpError);
   }
-})
+});
 
 const deleteTransaction = catchAsync(async (req, res, next) => {
-  const { id } = req.params
+  const { id } = req.params;
   try {
-    const response = await Transaction.findByPk(id)
+    const schema = {
+      where: {
+        id: id,
+      },
+    };
 
-    if (!response) {
-      const httpError = createHttpError(
-        404,
-                `[Error deleting Transactions] - [transaction - DELETE]: User with ID '${id}' doesn't exist or it's disabled`
-      )
-      res.status(404).json(httpError)
-    } else {
-      response.destroy()
+    const response = await validationDb(schema, Transaction, true);
 
-      endpointResponse({
-        res,
-        message: 'Delete transaction succesfully',
-        body: response
-      })
-    }
+    response.destroy();
+
+    endpointResponse({
+      res,
+      message: "Delete transaction succesfully",
+      body: response,
+    });
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
-            `[Error deleting Transaction] - [index - DELETE]: ${error.message}`
-    )
-    next(httpError)
+      `[Error deleting Transaction] - [index - DELETE]: ${error.message}`
+    );
+    next(httpError);
   }
-})
+});
 
-module.exports = { getTransaction, getTransactionById, createTransaction, editTransaction, deleteTransaction }
+module.exports = {
+  getTransaction,
+  getTransactionById,
+  createTransaction,
+  editTransaction,
+  deleteTransaction,
+};
