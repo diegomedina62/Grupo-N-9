@@ -2,11 +2,9 @@ const createHttpError = require("http-errors");
 
 const { Transaction, User, Category } = require("../database/models");
 
-
-const { endpointResponse } = require('../helpers/success')
-const validationDb = require('../helpers/validationDb')
-const { catchAsync } = require('../helpers/catchAsync')
-
+const { endpointResponse } = require("../helpers/success");
+const validationDb = require("../helpers/validationDb");
+const { catchAsync } = require("../helpers/catchAsync");
 
 const getTransaction = catchAsync(async (req, res, next) => {
   try {
@@ -27,14 +25,13 @@ const getTransaction = catchAsync(async (req, res, next) => {
 
 const getTransactionById = catchAsync(async (req, res, next) => {
   try {
-
-    const { id } = req.params
+    const { id } = req.params;
     const schema = {
       where: {
-        id: id
-      }
-    }
-    const response = await validationDb(schema, Transaction, true)
+        id: id,
+      },
+    };
+    const response = await validationDb(schema, Transaction, true);
 
     endpointResponse({
       res,
@@ -54,23 +51,21 @@ const createTransaction = catchAsync(async (req, res, next) => {
   try {
     const { date, amount, user, category } = req.body;
 
-
     const schema = {
       where: {
-        id: user
-      }
-    }
+        id: user,
+      },
+    };
 
-  // found if the id user exist
+    // found if the id user exist
 
-    await validationDb(schema, User, true)
-    
-    schema.where.id = category
+    await validationDb(schema, User, true);
+
+    schema.where.id = category;
 
     // found if the id category exist
 
-    await validationDb(schema, Category, true)
-
+    await validationDb(schema, Category, true);
 
     const createUser = await Transaction.create({
       categoryId: category,
@@ -95,44 +90,41 @@ const createTransaction = catchAsync(async (req, res, next) => {
 
 const editTransaction = catchAsync(async (req, res, next) => {
   try {
+    const { user, amount, category, date } = req.body;
 
-    const { user, amount, category, date } = req.body
+    const { id } = req.params;
 
-    const { id } = req.params
-
-     const schema = {
+    const schema = {
       where: {
-        id: id
-      }
-    }
+        id: id,
+      },
+    };
 
-    await validationDb(schema, Transaction, true)
-    
+    await validationDb(schema, Transaction, true);
 
-  // found if the id user exist
-   
-    schema.where.id = user
+    // found if the id user exist
 
-    await validationDb(schema, User, true)
+    schema.where.id = user;
+
+    await validationDb(schema, User, true);
 
     // found if the id category exist
 
-    schema.where.id = category
+    schema.where.id = category;
 
-    await validationDb(schema, Category, true)
+    await validationDb(schema, Category, true);
 
-
-
-
-    await Transaction.update({
-      categoryId: category,
-      userId: user,
-      date,
-      amount
-    }, {
-      where: {
-        id
-
+    await Transaction.update(
+      {
+        categoryId: category,
+        userId: user,
+        date,
+        amount,
+      },
+      {
+        where: {
+          id,
+        },
       }
     );
 
@@ -140,9 +132,8 @@ const editTransaction = catchAsync(async (req, res, next) => {
     endpointResponse({
       res,
 
-      message: 'Transaction updated successfully',
-    })
-
+      message: "Transaction updated successfully",
+    });
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
@@ -155,26 +146,21 @@ const editTransaction = catchAsync(async (req, res, next) => {
 const deleteTransaction = catchAsync(async (req, res, next) => {
   const { id } = req.params;
   try {
-
     const schema = {
       where: {
-        id: id
-      }
-    }
+        id: id,
+      },
+    };
 
-    const response = await validationDb(schema, Transaction, true)
- 
+    const response = await validationDb(schema, Transaction, true);
 
-   
-      response.destroy()
+    response.destroy();
 
-      endpointResponse({
-        res,
-        message: 'Delete transaction succesfully',
-        body: response
-      })
-    
-
+    endpointResponse({
+      res,
+      message: "Delete transaction succesfully",
+      body: response,
+    });
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
