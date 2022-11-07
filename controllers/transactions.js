@@ -49,7 +49,7 @@ const getTransactionById = catchAsync(async (req, res, next) => {
 
 const createTransaction = catchAsync(async (req, res, next) => {
   try {
-    const { date, amount, user, category } = req.body;
+    const { date, amount, user, category, description } = req.body;
 
     const schema = {
       where: {
@@ -72,6 +72,7 @@ const createTransaction = catchAsync(async (req, res, next) => {
       userId: user,
       date,
       amount,
+      description
     });
 
     endpointResponse({
@@ -90,7 +91,7 @@ const createTransaction = catchAsync(async (req, res, next) => {
 
 const editTransaction = catchAsync(async (req, res, next) => {
   try {
-    const { user, amount, category, date } = req.body;
+    const { user, amount, category, date, description } = req.body;
 
     const { id } = req.params;
 
@@ -120,6 +121,7 @@ const editTransaction = catchAsync(async (req, res, next) => {
         userId: user,
         date,
         amount,
+        description
       },
       {
         where: {
