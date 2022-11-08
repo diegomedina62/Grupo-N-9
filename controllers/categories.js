@@ -2,6 +2,7 @@ const createHttpError = require('http-errors')
 const { Category } = require('../database/models')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
+const validationDb = require('../helpers/validationDb')
 
 const getCategories = catchAsync(async (req, res, next) => {
   try {
@@ -64,4 +65,20 @@ const getCategoryById = catchAsync(async (req, res, next) => {
   }
 })
 
-module.exports = { createCategory, getCategoryById, getCategories }
+const editCategory = catchAsync(async (req, res, next) => {
+  try {
+    endpointResponse({
+      res,
+      message: 'edit a category',
+      body: ''
+    })
+  } catch (error) {
+    const httpError = createHttpError(
+      error.statusCode,
+      `[Error retrieving categories] - [index - PUT]: ${error.message}`
+    )
+    next(httpError)
+  }
+})
+
+module.exports = { createCategory, getCategoryById, getCategories, editCategory }
