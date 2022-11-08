@@ -25,6 +25,9 @@ const createCategory = catchAsync(async (req, res, next) => {
   try {
     const { name, description } = req.body
 
+    const schemaName = { where: { name } }
+    await validationDb(schemaName, Category, false)
+
     const data = {
       name,
       description
@@ -69,19 +72,13 @@ const editCategory = catchAsync(async (req, res, next) => {
   const { id } = req.params
   const { name, description } = req.body
 
-  // Validate the id
   const schemaId = { where: { id } }
   const schemaName = { where: { name } }
 
   const [category] = await Promise.all([
     validationDb(schemaId, Category, true),
     validationDb(schemaName, Category, false)
-    // Category.findOne({ where: { name } })
   ])
-
-  // if (nameExist) {
-  //   return new ErrorObject(`The categories ${name} already exist`, 400)
-  // }
 
   await category.update({ name, description })
 
