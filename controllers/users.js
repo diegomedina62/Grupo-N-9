@@ -25,6 +25,7 @@ const getUser = catchAsync(async (req, res, next) => {
 
       const response = {
         totalItems,
+        itemsPerPage: limit,
         currentPage: parsePage,
         totalPages,
         previousPage,
