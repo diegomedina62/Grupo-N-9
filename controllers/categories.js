@@ -53,7 +53,9 @@ const createCategory = catchAsync(async (req, res, next) => {
 const getCategoryById = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params
-    const category = await Category.findByPk(id)
+    const schema = { where: { id } }
+
+    const category = await validationDb(schema, Category, true)
     endpointResponse({
       res,
       message: 'obtain category data',

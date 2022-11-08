@@ -17,7 +17,7 @@ const validationDb = async (schema, model, match) => {
       reject(new ErrorObject(`${Object.keys(schema.where)[0]}: ${Object.values(schema.where)} exist in database`, 400))
     })
   } catch (error) {
-    throw new ErrorObject('Database connection failed ', error.statusCode)
+    throw new ErrorObject('Database connection failed', error.statusCode)
   }
 }
 
