@@ -1,40 +1,32 @@
-const { ErrorObject } = require('./error')
-
-const Role = require('../database/models/role')
+const { Role } = require('../database/models')
 
 const validationDb = require('../helpers/validationDb')
+const { ErrorObject } = require('../helpers/error')
 
 const ownership = async (req, res, next) => {
-  let idQuery
+  const idParams = req.params.id
 
   if (!req.userAuth) {
     const httpError = new ErrorObject('Restricted access: authentication required for the query', 403)
     next(httpError)
   }
 
-  const idUser = req.userAuth.id
-  const idRoleUser = req.userAuth.roleId
-
-  if (req.query.user) {
-    idQuery = req.query.user
-  }
-  if (req.params.id) {
-    idQuery = req.params.id
-  }
+  const idUser = parseInt(req.userAuth.id)
+  const userRoleId = parseInt(req.userAuth.roleId)
 
   try {
-    const schema = { where: { id: idRoleUser } }
+    const schema = { where: { id: userRoleId } }
     const role = await validationDb(schema, Role, true)
-    const roleUser = role.name
+    const userRole = role.name
 
-    if (idUser === idQuery || roleUser === 'ADMIN') {
-      next()
+    if (idUser !== idParams && userRole !== 'ADMIN') {
+      console.log('Entre')
+      const httpError = new ErrorObject('Restricted access: User is not authorized to make this request', 403)
+      next(httpError)
     }
-
-    const httpError = new ErrorObject('Restricted access: User is not authorized to make this request', 403)
-    next(httpError)
+    next()
   } catch (error) {
-    const httpError = new ErrorObject(`Restricted access: ${error.message}`, 403)
+    const httpError = new ErrorObject(`Restricted access: ${error.message}`, error.statusCode)
     next(httpError)
   }
 }
