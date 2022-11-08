@@ -9,13 +9,29 @@ const validationDb = require('../helpers/validationDb')
 
 const getUser = catchAsync(async (req, res, next) => {
   try {
+    console.log(req)
     const { page } = req.query
 
     if (page) {
-      const offset = page * 10
-      const limit = offset + 10
+      const parsePage = parseInt(page, 10)
+      const limit = 10
+      const offset = parsePage * limit
 
-      const response = await User.findAll({ limit, offset })
+      const { count: totalItems, rows: Users } = await User.findAndCountAll({ limit, offset })
+
+      const totalPages = Math.ceil(totalItems / limit)
+      const nextPage = totalPages - parsePage > 1 ? `${process.env.URL_BASE}users?page=${parsePage + 1}` : ''
+      const previousPage = parsePage > 0 ? `${process.env.URL_BASE}users?page=${parsePage - 1}` : ''
+
+      const response = {
+        totalItems,
+        currentPage: parsePage,
+        totalPages,
+        previousPage,
+        nextPage,
+        users: Users
+      }
+
       endpointResponse({
         res,
         message: 'All users',
