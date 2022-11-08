@@ -16,11 +16,14 @@ const encode = (payload) => {
 }
 
 const decoded = (token) => {
+  if (!token) {
+    throw new ErrorObject('There is no token in the request', 403)
+  }
   try {
     const payload = jwt.verify(token, process.env.SECRETORPRIVATEKEY)
     return payload
   } catch (error) {
-    throw new ErrorObject('Invalid Token', 403)
+    throw new ErrorObject('', 403)
   }
 }
 
