@@ -36,6 +36,16 @@ npx sequelize db:drop
 
 4. npx sequelize-cli db:seed:all
 
+### Despopular base de datos
+
+1. npx sequelize-cli db:seed:undo:all
+
+2. npx sequelize db:drop
+
+Si se quiere despopular una sola semilla se puede usar
+
+    npx sequelize-cli db:seed:undo nombre de la semilla
+
 ### Ver los usuarios disponibles
 
 Ver archivo users.json
