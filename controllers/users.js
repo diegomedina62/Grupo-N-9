@@ -9,12 +9,26 @@ const validationDb = require('../helpers/validationDb')
 
 const getUser = catchAsync(async (req, res, next) => {
   try {
-    const response = await User.findAll()
-    endpointResponse({
-      res,
-      message: 'All users',
-      body: response
-    })
+    const { page } = req.query
+
+    if (page) {
+      const offset = page * 10
+      const limit = offset + 10
+
+      const response = await User.findAll({ limit, offset })
+      endpointResponse({
+        res,
+        message: 'All users',
+        body: response
+      })
+    } else {
+      const response = await User.findAll()
+      endpointResponse({
+        res,
+        message: 'All users',
+        body: response
+      })
+    }
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
