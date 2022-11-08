@@ -1,0 +1,182 @@
+[
+    {
+        "firstName": "Jamie",
+        "lastName": "Ortiz",
+        "email": "JamiaOrt@test.com",
+        "password": "Gu5UibLS174&",
+        "roleId": 1,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "Sara",
+        "lastName": "Boone",
+        "email": "Sarabone@test.com",
+        "password": "5n^lZc1asj^2",
+        "roleId": 1,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "Debra",
+        "lastName": "Newton",
+        "email": "DebraNetwo@test.com",
+        "password": "lZ&3!N0V1Btj",
+        "roleId": 1,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "Dominique",
+        "lastName": "Valenzuela",
+        "email": "DominiqueValenzuela@test.com",
+        "password": "h9NbV*%78etM",
+        "roleId": 1,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "Diane",
+        "lastName": "Peterson",
+        "email": "Dianepertas@test.com",
+        "password": "F$j618#J8Vx^",
+        "roleId": 1,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "Claire",
+        "lastName": "Smith",
+        "email": "ClaireSmith@test.com",
+        "password": "7a^M3S5c$U6x",
+        "roleId": 1,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "Justin",
+        "lastName": "Hunter",
+        "email": "Justenhunt@test.com",
+        "password": "3ux5JX%%3YEz",
+        "roleId": 1,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "David",
+        "lastName": "Parker",
+        "email": "Davispark@test.com",
+        "password": "^&F5ETmW^16Q",
+        "roleId": 1,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "Carolyn",
+        "lastName": "Moore",
+        "email": "Carokmtl@test.com",
+        "password": "Dc2!b1JFw9!i",
+        "roleId": 1,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "Jennifer",
+        "lastName": "Dennis",
+        "email": "JennisDeqw@test.com",
+        "password": "9U1RP0*Hm1qd",
+        "roleId": 1,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "Mark",
+        "lastName": "Flores",
+        "email": "Markforwe@test.com",
+        "password": "53E47P8GAZl1",
+        "roleId": 2,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "Ann",
+        "lastName": "Clark",
+        "email": "Annsclrrq@test.com",
+        "password": "uW631@1b#T2p",
+        "roleId": 2,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "Cody",
+        "lastName": "Figueroa",
+        "email": "Codyfigars@test.com",
+        "password": "%Pd67$up14b7",
+        "roleId": 2,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "Christine",
+        "lastName": "Little",
+        "email": "Chrislittle@test.com",
+        "password": "MGw92V^Av08j",
+        "roleId": 2,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "Roberto",
+        "lastName": "Barber",
+        "email": "Robertobarbe@test.com",
+        "password": "072kX*EQ9!jz",
+        "roleId": 2,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "Alfred",
+        "lastName": "Andrews",
+        "email": "Alfrenandre@test.com",
+        "password": "QW87K!iasF7D",
+        "roleId": 2,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "Michael",
+        "lastName": "Willis",
+        "email": "Michaelwilli@test.com",
+        "password": "@uLA7zf58b^D",
+        "roleId": 2,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "Richard",
+        "lastName": "Holmes",
+        "email": "Richardholme@test.com",
+        "password": "C6*Z9Wu6kGHlc",
+        "roleId": 2,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "Dylan",
+        "lastName": "Williams",
+        "email": "Dylanwillian@test.com",
+        "password": "&RA5RGtxS647",
+        "roleId": 2,
+        "createdAt": "",
+        "updatedAt": ""
+    },
+    {
+        "firstName": "Philip",
+        "lastName": "Page",
+        "email": "PhilipPage@test.com",
+        "password": "$E871dyE58Bm",
+        "roleId": 2,
+        "createdAt": "",
+        "updatedAt": ""
+    }
+]

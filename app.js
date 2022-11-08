@@ -6,7 +6,10 @@ const logger = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
 
+
 const indexRouter = require("./routes/index");
+const cpUpload = require('./middlewares/uploadFile')
+
 
 const port = process.env.PORT || 3000;
 
@@ -15,8 +18,16 @@ const swaggerUi = require("swagger-ui-express");
 const YAML = require("yamljs");
 const swaggerDocument = YAML.load("./swagger.yaml");
 
+
 const app = express();
 app.use(cors());
+app.use(logger('dev'))
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(cookieParser())
+app.use(express.static(path.join(__dirname, 'public')))
+app.use(cpUpload)
+
 
 app.use(logger("dev"));
 app.use(express.json());
