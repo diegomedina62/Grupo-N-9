@@ -4,7 +4,6 @@ const usersRouter = require('./users')
 const transactionsRouter = require('./transactions')
 const categoriesRouter = require('./categories')
 const loginRouter = require('../routes/login')
-const { validacionToken } = require('../middlewares/jwt')
 
 const router = express.Router()
 
