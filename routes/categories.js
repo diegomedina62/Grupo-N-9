@@ -15,6 +15,6 @@ const router = Router()
 router.get('/', getCategories)
 router.post('/', validationMiddleware(categoriesSchemaPOST), createCategory)
 router.get('/:id', checkIdCategory, getCategoryById)
-router.put('/categories/:id', editCategory)
+router.put('/:id', editCategory)
 
 module.exports = router

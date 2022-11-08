@@ -66,11 +66,20 @@ const getCategoryById = catchAsync(async (req, res, next) => {
 })
 
 const editCategory = catchAsync(async (req, res, next) => {
+  const { id } = req.params
+  const { name, description } = req.body
+
+  // Validate the id
+  const schemaId = { where: { id } }
+  const category = await validationDb(schemaId, Category, true)
+
+  await category.update({ name, description })
+
   try {
     endpointResponse({
       res,
       message: 'edit a category',
-      body: ''
+      body: category
     })
   } catch (error) {
     const httpError = createHttpError(
