@@ -1,15 +1,18 @@
 const jwt = require('jsonwebtoken')
-const { token } = require('morgan')
+const { ErrorObject } = require('./error')
 
-const tokenCreator = (id) => {
-
-    console.log(id)
-
-    const token = jwt.sign({ id }, process.env.SECRETORPRIVATEKEY, {
-        expiresIn: '4h'
+const tokenCreator = (payload) => {
+  return new Promise((resolve, reject) => {
+    jwt.sign(payload, process.env.SECRETORPRIVATEKEY, {
+      expiresIn: '4h'
+    }, (error, token) => {
+      if (error) {
+        reject(new ErrorObject('internal server error creating token', error.statusCode))
+      } else {
+        resolve(token)
+      }
     })
-
-    return token
+  })
 }
 
 module.exports = tokenCreator
