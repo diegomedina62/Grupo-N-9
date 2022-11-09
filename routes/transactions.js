@@ -103,6 +103,44 @@ router.get('/', getTransaction)
 *          description: error of server
 */
 router.get('/:id', getTransactionById)
+
+ /**
+ /
+* @swagger
+* /transaction:
+*  post:
+*    summary: Find transaction by ID
+*    description: Add a new transaction
+*    requestBody:
+*            description: Create a new pet in the store
+*            content:
+*              application/json:
+*                schema:
+*                  $ref: '#/components/schemas/transactions'
+*              application/xml:
+*                schema:
+*                  $ref: '#/components/schemas/transactions'
+*              application/x-www-form-urlencoded:
+*                schema:
+*                  $ref: '#/components/schemas/transactions'
+*            required: true
+*    responses:
+*        '200':
+*          description: successfuly operation
+*          content:
+*            application/json:
+*              schema:
+*                $ref: '#/components/schemas/transactions'          
+*            application/xml:
+*              schema:
+*                $ref: '#/components/schemas/transactions'
+*        '400':
+*          description: Invalid ID supplied
+*        '404':
+*          description: transaction not found
+*        '500':
+*          description: error of server
+*/
 router.post('/', validationMiddleware(transactionSchemaPOST), createTransaction)
 router.put('/:id', editTransaction)
 router.delete('/:id', deleteTransaction)
