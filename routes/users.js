@@ -56,6 +56,7 @@ const router = express.Router();
  * /users:
  *  get:
  *    summary: returns the list of all the users
+ *    tags: [users]
  *    responses:
  *      200:
  *         description: the list of the users
@@ -118,57 +119,91 @@ router.get("/:id", getUserId);
 router.post("/", validationMiddleware(userSchemaPOST), postUsers);
 
 /**
- * @swagger
- * /users/{id}:
- *  put:
- *    summary: Get the users by id
- *       tags: [users]
- *    parameters:
- *        - in: path
- *        name: id
- *        schema:
- *          type: integer
- *        required: true
- *        description: The user id
- *    requestBody:
- *        required: true
- *        content:
- *          application/json:
- *            schema:
- *              $ref: '#/components/schemas/users'
- *    responses:
- *          200:
- *            description: The user was updated
- *            contents:
- *              application/json:
- *              schema:
- *                $ref: '#/components/schemas/users'
- *          404:
- *            description: The user was not found
- */
+ /
+* @swagger
+* /users/{id}:
+*  put:
+*    summary:  Update an existing users
+*    tags: [users]
+*    description: Update an existing users by Id
+*    parameters:
+*       - name: id
+*         in: path
+*         description: ID of users to return
+*         required: true
+*         schema:
+*           type: integer
+*           format: int64 
+*    requestBody:
+*            description: Update a users
+*            content:
+*              application/json:
+*                schema:
+*                  $ref: '#/components/schemas/users'
+*              application/xml:
+*                schema:
+*                  $ref: '#/components/schemas/users'
+*              application/x-www-form-urlencoded:
+*                schema:
+*                  $ref: '#/components/schemas/users'
+*            required: true
+*    responses:
+*        '200':
+*          description: successfuly operation
+*          content:
+*            application/json:
+*              schema:
+*                $ref: '#/components/schemas/users'          
+*            application/xml:
+*              schema:
+*                $ref: '#/components/schemas/users'
+*        '400':
+*          description: Invalid ID supplied
+*        '404':
+*          description: category not found
+*        '500':
+*          description: error of server
+*    security:
+*     - bearerAuth: []
+*/
 
 router.put("/:id", validationMiddleware(userSchemaPUT), putUsers);
 
 /**
- * @swagger
- *  /users/{id}:
- *    delete:
- *      summary: remove the users by id
- *      tags: [users]
- *      parameters:
- *        - in: path
- *        name: id
- *        schema:
- *          type: integer
- *        required: true
- *        description: The user id
- *
- *    responses:
- *       200:
- *          description: The user was deleted
- *       404:
- *          description: The user was not found
- */
+ /
+* @swagger
+* /categories/{id}:
+*  delete:
+*    summary:  Delete a users
+*    tags: [users]
+*    description: Delete a users
+*    parameters:
+*       - name: id
+*         in: path
+*         description: ID of users to delete
+*         required: true
+*         schema:
+*           type: integer
+*           format: int64 
+*    responses:
+*        '200':
+*          description: successfuly operation
+*          content:
+*            application/json:
+*              schema:
+*                $ref: '#/components/schemas/users'          
+*            application/xml:
+*              schema:
+*                $ref: '#/components/schemas/users'
+*        '400':
+*          description: Invalid ID supplied
+*        '404':
+*          description: users not found
+*        '500':
+*          description: error of server
+*    security:
+*     - bearerAuth: []
+*/
 router.delete("/:id", deleteUser);
 
 module.exports = router;
