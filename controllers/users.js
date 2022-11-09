@@ -167,8 +167,10 @@ const deleteUser = catchAsync(async (req, res, next) => {
 
     const schema = { where: { id } }
     const response = await validationDb(schema, User, true)
+
     response.destroy()
 
+    deleteFile(response.avatar)
     endpointResponse({
       res,
       message: 'User deleted successfully',
