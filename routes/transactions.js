@@ -21,8 +21,8 @@ const router = express.Router()
  *      type: object
  *      requires:
  *        -amount
- *        -userId
- *        -categoryId
+ *        -user
+ *        -category
  *        -date
  *      properties:
  *        description:
@@ -31,10 +31,10 @@ const router = express.Router()
  *        amount:
  *          type: integer
  *          description: This is the amount of the transaction
- *        userId:
+ *        user:
  *          type: integer
  *          description: This is the user id of the transaction
- *        categoryId:
+ *        category:
  *          type: integer
  *          description: This is the category id of the transaction
  *        deletedAt:
