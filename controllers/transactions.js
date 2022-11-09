@@ -87,7 +87,7 @@ const createTransaction = catchAsync(async (req, res, next) => {
     endpointResponse({
       res,
       message: 'Transaction created successfully',
-      body: createUser
+      body: response
     })
   } catch (error) {
     const httpError = createHttpError(
@@ -133,8 +133,8 @@ const editTransaction = catchAsync(async (req, res, next) => {
     // eslint-disable-next-line no-undef
     endpointResponse({
       res,
-
-      message: 'Transaction updated successfully'
+      message: 'Transaction updated successfully',
+      body: response
     })
   } catch (error) {
     const httpError = createHttpError(
