@@ -103,7 +103,7 @@ suite("Tests for Categories Routes", function () {
         .get(`/categories/0`)
         .send(updateReqBody)
         .end((err, res) => {
-          assert.equal(res.status, 400);
+          assert.equal(res.status, 404);
           done();
         });
     });
