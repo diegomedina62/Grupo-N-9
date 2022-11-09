@@ -20,16 +20,11 @@ const router = express.Router()
  *    transactions:
  *      type: object
  *      requires:
- *        -description
  *        -amount
  *        -userId
  *        -categoryId
  *        -date
- *        -deletedAt
  *      properties:
- *        id:
- *          type: integer
- *          description: The auto-generated id of the transaction
  *        description:
  *          type: string
  *          description: This is the description of the transaction
