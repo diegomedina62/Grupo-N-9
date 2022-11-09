@@ -3,14 +3,14 @@ const bcryptjs = require('bcryptjs')
 
 const { User } = require('../database/models')
 
+const deleteFile = require('../helpers/deleteFile')
+const ownership = require('../helpers/ownership')
+const validationDb = require('../helpers/validationDb')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
-const validationDb = require('../helpers/validationDb')
-const deleteFile = require('../helpers/deleteFile')
 
 const getUser = catchAsync(async (req, res, next) => {
   try {
-    console.log(req)
     const { page } = req.query
 
     if (page) {
@@ -59,8 +59,11 @@ const getUser = catchAsync(async (req, res, next) => {
 const getUserId = catchAsync(async (req, res, next) => {
   const { id } = req.params
   try {
+    await ownership(req.userAuth, id)
+
     const schema = { where: { id } }
     const response = await validationDb(schema, User, true)
+
     endpointResponse({
       res,
       message: 'User Id succesfully',
@@ -109,11 +112,13 @@ const postUsers = catchAsync(async (req, res, next) => {
 })
 
 const putUsers = catchAsync(async (req, res, next) => {
+  const { ...data } = req.body
   const { id } = req.params
   let schema
-  const { ...data } = req.body
 
   try {
+    await ownership(req.userAuth, id)
+
     // Verify that email does not exist in the database
     if (data.email) {
       schema = { where: { email: data.email } }
@@ -158,13 +163,16 @@ const putUsers = catchAsync(async (req, res, next) => {
 const deleteUser = catchAsync(async (req, res, next) => {
   const { id } = req.params
   try {
+    await ownership(req.userAuth, id)
+
     const schema = { where: { id } }
-    await validationDb(schema, User, true)
-    await User.destroy({ where: { id } })
+    const response = await validationDb(schema, User, true)
+    response.destroy()
+
     endpointResponse({
       res,
-      message: 'User deleted successfully'
-      // body: response
+      message: 'User deleted successfully',
+      body: response
     })
   } catch (error) {
     const httpError = createHttpError(
