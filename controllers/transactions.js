@@ -34,9 +34,10 @@ const getTransaction = catchAsync(async (req, res, next) => {
 const getTransactionById = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params
-    await ownership(req.userAuth, id)
     const schema = { where: { id } }
     const response = await validationDb(schema, Transaction, true)
+
+    await ownership(req.userAuth, response.userId)
 
     endpointResponse({
       res,
@@ -56,20 +57,12 @@ const createTransaction = catchAsync(async (req, res, next) => {
   try {
     const { date, amount, user, category, description } = req.body
 
-    const schema = {
-      where: {
-        id: user
-      }
-    }
-
     // found if the id user exist
-
+    const schema = { where: { id: user } }
     await validationDb(schema, User, true)
 
-    schema.where.id = category
-
     // found if the id category exist
-
+    schema.where.id = category
     await validationDb(schema, Category, true)
 
     const createUser = await Transaction.create({
@@ -100,11 +93,11 @@ const editTransaction = catchAsync(async (req, res, next) => {
 
     const { id } = req.params
 
-    await ownership(req.userAuth, id)
-
     // found if the id transaction exist
     const schema = { where: { id } }
-    await validationDb(schema, Transaction, true)
+    const transaction = await validationDb(schema, Transaction, true)
+
+    await ownership(req.userAuth, transaction.userId)
 
     // found if the id user exist
     schema.where.id = user
@@ -114,20 +107,14 @@ const editTransaction = catchAsync(async (req, res, next) => {
     schema.where.id = category
     await validationDb(schema, Category, true)
 
-    await Transaction.update(
-      {
-        categoryId: category,
-        userId: user,
-        date,
-        amount,
-        description
-      },
-      {
-        where: {
-          id
-        }
-      }
-    )
+    transaction.set({
+      categoryId: category,
+      userId: user,
+      date,
+      amount,
+      description
+    })
+    await transaction.save()
 
     // eslint-disable-next-line no-undef
     endpointResponse({
@@ -147,10 +134,10 @@ const editTransaction = catchAsync(async (req, res, next) => {
 const deleteTransaction = catchAsync(async (req, res, next) => {
   const { id } = req.params
   try {
-    await ownership(req.userAuth, id)
-
     const schema = { where: { id } }
     const response = await validationDb(schema, Transaction, true)
+
+    await ownership(req.userAuth, response.userId)
 
     response.destroy()
 
