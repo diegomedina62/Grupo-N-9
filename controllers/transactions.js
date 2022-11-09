@@ -2,10 +2,10 @@ const createHttpError = require('http-errors')
 
 const { Transaction, User, Category } = require('../database/models')
 
-const { endpointResponse } = require('../helpers/success')
+const ownership = require('../helpers/ownership')
 const validationDb = require('../helpers/validationDb')
 const { catchAsync } = require('../helpers/catchAsync')
-const ownership = require('../helpers/ownership')
+const { endpointResponse } = require('../helpers/success')
 
 const getTransaction = catchAsync(async (req, res, next) => {
   const { query } = req.query
@@ -34,11 +34,8 @@ const getTransaction = catchAsync(async (req, res, next) => {
 const getTransactionById = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params
-    const schema = {
-      where: {
-        id
-      }
-    }
+    await ownership(req.userAuth, id)
+    const schema = { where: { id } }
     const response = await validationDb(schema, Transaction, true)
 
     endpointResponse({
@@ -103,24 +100,18 @@ const editTransaction = catchAsync(async (req, res, next) => {
 
     const { id } = req.params
 
-    const schema = {
-      where: {
-        id
-      }
-    }
+    await ownership(req.userAuth, id)
 
+    // found if the id transaction exist
+    const schema = { where: { id } }
     await validationDb(schema, Transaction, true)
 
     // found if the id user exist
-
     schema.where.id = user
-
     await validationDb(schema, User, true)
 
     // found if the id category exist
-
     schema.where.id = category
-
     await validationDb(schema, Category, true)
 
     await Transaction.update(
@@ -156,12 +147,9 @@ const editTransaction = catchAsync(async (req, res, next) => {
 const deleteTransaction = catchAsync(async (req, res, next) => {
   const { id } = req.params
   try {
-    const schema = {
-      where: {
-        id
-      }
-    }
+    await ownership(req.userAuth, id)
 
+    const schema = { where: { id } }
     const response = await validationDb(schema, Transaction, true)
 
     response.destroy()
