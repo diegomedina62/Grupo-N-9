@@ -9,7 +9,6 @@ const validationDb = require('../helpers/validationDb')
 
 const getUser = catchAsync(async (req, res, next) => {
   try {
-    console.log(req)
     const { page } = req.query
 
     if (page) {
