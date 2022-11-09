@@ -69,6 +69,39 @@ const router = express.Router()
 *                  $ref: '#/components/schemas/transactions'
 */
 router.get('/', getTransaction)
+
+
+ /**
+ /
+* @swagger
+* /transaction/{id}:
+*  get:
+*    summary: Find transaction by ID
+*    parameters:
+*       - name: id
+*         in: path
+*         description: ID of transaction to return
+*         required: true
+*         schema:
+*           type: integer
+*           format: int64 
+*    responses:
+*        '200':
+*          description: successfuly operation
+*          content:
+*            application/json:
+*              schema:
+*                $ref: '#/components/schemas/transactions'          
+*            application/xml:
+*              schema:
+*                $ref: '#/components/schemas/transactions'
+*        '400':
+*          description: Invalid ID supplied
+*        '404':
+*          description: Pet not found
+*        '500':
+*          description: error of server
+*/
 router.get('/:id', getTransactionById)
 router.post('/', validationMiddleware(transactionSchemaPOST), createTransaction)
 router.put('/:id', editTransaction)
