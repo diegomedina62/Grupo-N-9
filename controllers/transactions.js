@@ -5,10 +5,18 @@ const { Transaction, User, Category } = require('../database/models')
 const { endpointResponse } = require('../helpers/success')
 const validationDb = require('../helpers/validationDb')
 const { catchAsync } = require('../helpers/catchAsync')
+const ownership = require('../helpers/ownership')
 
 const getTransaction = catchAsync(async (req, res, next) => {
+  const { query } = req.query
+  let response
   try {
-    const response = await Transaction.findAll()
+    if (query) {
+      await ownership(req.userAuth, query)
+      response = await Transaction.findAll({ where: { userId: query } })
+    } else {
+      response = await Transaction.findAll()
+    }
     endpointResponse({
       res,
       message: 'Transactions retrieved successfully',
