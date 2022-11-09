@@ -48,7 +48,7 @@ const getUserId = catchAsync(async (req, res, next) => {
 })
 
 const postUsers = catchAsync(async (req, res, next) => {
-  const { roleId, ...user } = req.body
+  const { roleId = 2, ...user } = req.body
 
   try {
     // Verify that email does not exist in the database
@@ -58,6 +58,7 @@ const postUsers = catchAsync(async (req, res, next) => {
     // Encrypt password
     const salt = bcryptjs.genSaltSync()
     user.password = bcryptjs.hashSync(user.password, salt)
+    user.roleId = roleId
 
     const response = await User.create(user)
 
