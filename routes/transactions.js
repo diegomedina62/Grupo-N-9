@@ -64,7 +64,7 @@ const router = express.Router()
 *                items:
 *                  $ref: '#/components/schemas/transactions'
 */
-router.get('/', getTransaction)
+router.get('/', authUser, getTransaction)
 
 
  /**
@@ -98,7 +98,7 @@ router.get('/', getTransaction)
 *        '500':
 *          description: error of server
 */
-router.get('/:id', getTransactionById)
+router.get('/:id', authUser, getTransactionById)
 
  /**
  /
@@ -139,7 +139,7 @@ router.get('/:id', getTransactionById)
 *    security:
 *     - bearerAuth: []
 */
-router.post('/', validationMiddleware(transactionSchemaPOST), createTransaction)
+router.post('/', authUser, validationMiddleware(transactionSchemaPOST), createTransaction)
 
  /**
  /
@@ -188,7 +188,7 @@ router.post('/', validationMiddleware(transactionSchemaPOST), createTransaction)
 *    security:
 *     - bearerAuth: []
 */
-router.put('/:id', editTransaction)
+router.put('/:id', authUser, editTransaction)
 
  /**
  /
@@ -224,6 +224,6 @@ router.put('/:id', editTransaction)
 *    security:
 *     - bearerAuth: []
 */
-router.delete('/:id', deleteTransaction)
+router.delete('/:id', authUser, deleteTransaction)
 
 module.exports = router
