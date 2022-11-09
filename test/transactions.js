@@ -222,7 +222,7 @@ suite("Test on transaction routes", function () {
     test("trying to delete with invalid  transaction ID", function (done) {
       chai
         .request(server)
-        .delete(`/transactions/${transactionID}`)
+        .delete(`/transactions/0`)
         .send()
         .end((err, res) => {
           assert.equal(res.status, 404);
