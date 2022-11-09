@@ -6,28 +6,43 @@ const logger = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
 
-
 const indexRouter = require("./routes/index");
-const cpUpload = require('./middlewares/uploadFile')
-
+const cpUpload = require("./middlewares/uploadFile");
 
 const port = process.env.PORT || 3000;
 
 // swagger
 const swaggerUi = require("swagger-ui-express");
-const YAML = require("yamljs");
-const swaggerDocument = YAML.load("./swagger.yaml");
+const swaggerJSDoc = require("swagger-jsdoc");
 
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Alkemy Bank",
+      version: "1.0.0",
+      description: "This is an API of Alkemy Bank",
+    },
+    servers: [
+      {
+        url: "https://localhost:3000",
+      },
+    ],
+  },
+  apis: ["./routes/*.js"],
+};
+
+const specs = swaggerJSDoc(options);
 
 const app = express();
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 app.use(cors());
-app.use(logger('dev'))
-app.use(express.json())
-app.use(express.urlencoded({ extended: false }))
-app.use(cookieParser())
-app.use(express.static(path.join(__dirname, 'public')))
-app.use(cpUpload)
-
+app.use(logger("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, "public")));
+app.use(cpUpload);
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -36,13 +51,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-
-// middleware
-app.use(
-  "/api-documentation",
-  swaggerUi.serve,
-  swaggerUi.setup(swaggerDocument)
-);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
