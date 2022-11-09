@@ -25,6 +25,9 @@ const createCategory = catchAsync(async (req, res, next) => {
   try {
     const { name, description } = req.body
 
+    const schemaName = { where: { name } }
+    await validationDb(schemaName, Category, false)
+
     const data = {
       name,
       description
@@ -50,7 +53,9 @@ const createCategory = catchAsync(async (req, res, next) => {
 const getCategoryById = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params
-    const category = await Category.findByPk(id)
+    const schema = { where: { id } }
+
+    const category = await validationDb(schema, Category, true)
     endpointResponse({
       res,
       message: 'obtain category data',
@@ -69,9 +74,13 @@ const editCategory = catchAsync(async (req, res, next) => {
   const { id } = req.params
   const { name, description } = req.body
 
-  // Validate the id
   const schemaId = { where: { id } }
-  const category = await validationDb(schemaId, Category, true)
+  const schemaName = { where: { name } }
+
+  const [category] = await Promise.all([
+    validationDb(schemaId, Category, true),
+    validationDb(schemaName, Category, false)
+  ])
 
   await category.update({ name, description })
 
@@ -90,4 +99,31 @@ const editCategory = catchAsync(async (req, res, next) => {
   }
 })
 
-module.exports = { createCategory, getCategoryById, getCategories, editCategory }
+const deleteCategory = catchAsync(async (req, res, next) => {
+  const { id } = req.params
+  try {
+    const schema = {
+      where: {
+        id
+      }
+    }
+
+    const response = await validationDb(schema, Category, true)
+
+    response.destroy()
+
+    endpointResponse({
+      res,
+      message: 'Delete category succesfully',
+      body: response
+    })
+  } catch (error) {
+    const httpError = createHttpError(
+      error.statusCode,
+      `[Error deleting Category] - [index - DELETE]: ${error.message}`
+    )
+    next(httpError)
+  }
+})
+
+module.exports = { createCategory, getCategoryById, getCategories, editCategory, deleteCategory }

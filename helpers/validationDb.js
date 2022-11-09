@@ -7,17 +7,17 @@ const validationDb = async (schema, model, match) => {
     return new Promise((resolve, reject) => {
       if (match) {
         if (response === null) {
-          reject(new ErrorObject(`${Object.keys(schema.where)[0]}: ${schema.where.id} not found in database`, 404))
+          reject(new ErrorObject(`${Object.keys(schema.where)[0]}: ${Object.values(schema.where)} not found in database`, 404))
         }
         resolve(response)
       }
       if (response === null) {
         resolve()
       }
-      reject(new ErrorObject(`${Object.keys(schema.where)[0]}: ${schema.where.id} exist in database`, 400))
+      reject(new ErrorObject(`${Object.keys(schema.where)[0]}: ${Object.values(schema.where)} exist in database`, 400))
     })
   } catch (error) {
-    throw new ErrorObject('Database connection failed ', error.statusCode)
+    throw new ErrorObject('Database connection failed', error.statusCode)
   }
 }
 
