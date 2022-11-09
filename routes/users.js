@@ -116,6 +116,37 @@ router.get("/:id", getUserId);
  *            description: Some server
  */
 router.post("/", validationMiddleware(userSchemaPOST), postUsers);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *  put:
+ *    summary: Get the users by id
+ *       tags: [users]
+ *    parameters:
+ *        - in: path
+ *        name: id
+ *        schema:
+ *          type: string
+ *        required: true
+ *        description: The user id
+ *    requestBody:
+ *        required: true
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/users'
+ *    responses:
+ *          200:
+ *            description: The user was updated
+ *            contents:
+ *              application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/users'
+ *          404:
+ *            description: The user was not found
+ */
+
 router.put("/:id", validationMiddleware(userSchemaPUT), putUsers);
 router.delete("/:id", deleteUser);
 
