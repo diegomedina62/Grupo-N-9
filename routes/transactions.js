@@ -54,6 +54,7 @@ const router = express.Router()
 * /transactions:
 *  get:
 *    summary: returns the list of all transactions
+*    tags: [transactions]
 *    responses:
 *      200:
 *         description: the list of transaction
@@ -75,6 +76,7 @@ router.get('/', authUser, getTransaction)
 * /transactions/{id}:
 *  get:
 *    summary: Find transaction by ID
+*    tags: [transactions]
 *    parameters:
 *       - name: id
 *         in: path
@@ -110,6 +112,7 @@ router.get('/:id', authUser, getTransactionById)
 * /transactions:
 *  post:
 *    summary: create a new transaction 
+*    tags: [transactions]
 *    description: Add a new transaction
 *    requestBody:
 *            description: Create a new transaction 
@@ -150,7 +153,8 @@ router.post('/', authUser, validationMiddleware(transactionSchemaPOST), createTr
 * @swagger
 * /transactions/{id}:
 *  put:
-*    summary:  Update an existing transaction 
+*    summary:  Update an existing transaction
+*    tags: [transactions] 
 *    description: Update an existing transaction by Id
 *    parameters:
 *       - name: id
@@ -199,7 +203,8 @@ router.put('/:id', authUser, editTransaction)
 * @swagger
 * /transactions/{id}:
 *  delete:
-*    summary:  Delete a transaction 
+*    summary:  Delete a transaction
+*    tags: [transactions] 
 *    description: Delete a transaction
 *    parameters:
 *       - name: id

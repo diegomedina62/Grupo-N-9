@@ -42,6 +42,7 @@ const router = Router()
 * /categories:
 *  get:
 *    summary: returns the list of all categories
+*    tags: [categories]
 *    responses:
 *      200:
 *         description: the list of categories
@@ -62,7 +63,8 @@ router.get('/', authUser, getCategories)
 * @swagger
 * /categories:
 *  post:
-*    summary: create a new category 
+*    summary: create a new category
+*    tags: [categories] 
 *    description: Add a new category
 *    requestBody:
 *            description: Create a new category 
@@ -105,6 +107,7 @@ router.post('/', authUser, validationMiddleware(categoriesSchemaPOST), createCat
 * /categories/{id}:
 *  get:
 *    summary: Find category by ID
+*    tags: [categories]
 *    parameters:
 *       - name: id
 *         in: path
@@ -139,7 +142,8 @@ router.get('/:id', authUser, getCategoryById)
 * @swagger
 * /categories/{id}:
 *  put:
-*    summary:  Update an existing category 
+*    summary:  Update an existing category
+*    tags: [categories] 
 *    description: Update an existing category by Id
 *    parameters:
 *       - name: id
@@ -188,7 +192,8 @@ router.put('/:id', authUser, editCategory)
 * @swagger
 * /categories/{id}:
 *  delete:
-*    summary:  Delete a category 
+*    summary:  Delete a category
+*    tags: [categories] 
 *    description: Delete a category
 *    parameters:
 *       - name: id
