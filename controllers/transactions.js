@@ -6,17 +6,22 @@ const ownership = require('../helpers/ownership')
 const validationDb = require('../helpers/validationDb')
 const { catchAsync } = require('../helpers/catchAsync')
 const { endpointResponse } = require('../helpers/success')
+const { encode } = require('../helpers/jwtFuntions')
 
 const getTransaction = catchAsync(async (req, res, next) => {
   const { query } = req.query
-  let response
+  let transactions
   try {
     if (query) {
       await ownership(req.userAuth, query)
-      response = await Transaction.findAll({ where: { userId: query } })
+      transactions = await Transaction.findAll({ where: { userId: query } })
     } else {
-      response = await Transaction.findAll()
+      transactions = await Transaction.findAll()
     }
+
+    //create token
+    const response = await encode(transactions)
+
     endpointResponse({
       res,
       message: 'Transactions retrieved successfully',
@@ -35,9 +40,12 @@ const getTransactionById = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params
     const schema = { where: { id } }
-    const response = await validationDb(schema, Transaction, true)
+    const transactions = await validationDb(schema, Transaction, true)
 
-    await ownership(req.userAuth, response.userId)
+    await ownership(req.userAuth, transactions.userId)
+
+    //create token
+    const response = await encode(transactions)
 
     endpointResponse({
       res,
@@ -72,6 +80,9 @@ const createTransaction = catchAsync(async (req, res, next) => {
       amount,
       description
     })
+
+    //create token
+    const response = await encode(createUser)
 
     endpointResponse({
       res,
@@ -116,6 +127,9 @@ const editTransaction = catchAsync(async (req, res, next) => {
     })
     await transaction.save()
 
+    //create token
+    const response = await encode(transaction)
+
     // eslint-disable-next-line no-undef
     endpointResponse({
       res,
@@ -135,11 +149,14 @@ const deleteTransaction = catchAsync(async (req, res, next) => {
   const { id } = req.params
   try {
     const schema = { where: { id } }
-    const response = await validationDb(schema, Transaction, true)
+    const transactions = await validationDb(schema, Transaction, true)
 
-    await ownership(req.userAuth, response.userId)
+    await ownership(req.userAuth, transactions.userId)
 
-    response.destroy()
+    transactions.destroy()
+
+    //create token
+    const response = await encode(transactions)
 
     endpointResponse({
       res,
