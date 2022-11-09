@@ -14,9 +14,8 @@ const cpUpload = require('./middlewares/uploadFile')
 const port = process.env.PORT || 3000;
 
 // swagger
-const swaggerUi = require("swagger-ui-express");
-const YAML = require("yamljs");
-const swaggerDocument = YAML.load("./swagger.yaml");
+const swaggerUi = require('swagger-ui-express')
+const {swaggerSetup} =  require ('./helpers/swagger.js')
 
 
 const app = express();
@@ -39,9 +38,9 @@ app.use("/", indexRouter);
 
 // middleware
 app.use(
-  "/api-documentation",
+  "/api/docs",
   swaggerUi.serve,
-  swaggerUi.setup(swaggerDocument)
+  swaggerUi.setup(swaggerSetup)
 );
 
 // catch 404 and forward to error handler
