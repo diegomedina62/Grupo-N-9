@@ -6,6 +6,7 @@ const { User } = require('../database/models')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
 const validationDb = require('../helpers/validationDb')
+const deleteFile = require('../helpers/deleteFile')
 
 const getUser = catchAsync(async (req, res, next) => {
   try {
@@ -58,11 +59,7 @@ const getUser = catchAsync(async (req, res, next) => {
 const getUserId = catchAsync(async (req, res, next) => {
   const { id } = req.params
   try {
-    const schema = {
-      where: {
-        id
-      }
-    }
+    const schema = { where: { id } }
     const response = await validationDb(schema, User, true)
     endpointResponse({
       res,
@@ -90,6 +87,7 @@ const postUsers = catchAsync(async (req, res, next) => {
     const salt = bcryptjs.genSaltSync()
     user.password = bcryptjs.hashSync(user.password, salt)
     user.roleId = roleId
+    user.avatar = req.filePath
 
     const response = await User.create(user)
 
@@ -99,6 +97,9 @@ const postUsers = catchAsync(async (req, res, next) => {
       body: response
     })
   } catch (error) {
+    // Checking if there are files in the request
+    if (req.filePath) { deleteFile(req.filePath) }
+
     const httpError = createHttpError(
       error.statusCode,
       `[Error creating user] - [index - POST]: ${error.message}`
