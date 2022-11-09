@@ -129,6 +129,12 @@ const putUsers = catchAsync(async (req, res, next) => {
     // Validate and extract user to update
     schema = { where: { id } }
     const user = await validationDb(schema, User, true)
+
+    if (req.filePath) {
+      deleteFile(user.avatar)
+      user.avatar = req.filePath
+    }
+
     user.set(data)
     await user.save()
 
@@ -138,6 +144,9 @@ const putUsers = catchAsync(async (req, res, next) => {
       body: user
     })
   } catch (error) {
+    // Checking if there are files in the request
+    if (req.filePath) { deleteFile(req.filePath) }
+
     const httpError = createHttpError(
       error.statusCode,
       `[Error updating user] - [index - PUT]: ${error.message}`
