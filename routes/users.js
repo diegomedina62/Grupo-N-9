@@ -68,6 +68,29 @@ const router = express.Router();
  */
 router.get("/", getUser);
 
+/**
+ * @swagger
+ * /users/{id}:
+ *    get:
+ *       summary: Get the users by id
+ *       tags: [users]
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           schema:
+ *            type: integer
+ *           required: true
+ *           description: The user id
+ *       responses:
+ *          200:
+ *            description: The user description by id
+ *            contents:
+ *              application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/users'
+ *          404:
+ *            description: The user was not found
+ */
 router.get("/:id", getUserId);
 router.post("/", validationMiddleware(userSchemaPOST), postUsers);
 router.put("/:id", validationMiddleware(userSchemaPUT), putUsers);
