@@ -1,24 +1,21 @@
-const express = require("express");
+const express = require('express')
 const {
   getTransaction,
   getTransactionById,
   createTransaction,
   editTransaction,
-  deleteTransaction,
-} = require("../controllers/transactions");
-const checkIdTransaction = require("../middlewares/checkidtransaction");
-const validationMiddleware = require("../middlewares/ValidationMiddleware");
-const transactionSchemaPOST = require("../schemas/transactionSchema-POST");
+  deleteTransaction
+} = require('../controllers/transactions')
+const authUser = require('../middlewares/authUser')
+const validationMiddleware = require('../middlewares/ValidationMiddleware')
+const transactionSchemaPOST = require('../schemas/transactionSchema-POST')
 
+const router = express.Router()
 
-const router = express.Router();
+router.get('/', authUser, getTransaction)
+router.get('/:id', authUser, getTransactionById)
+router.post('/', authUser, validationMiddleware(transactionSchemaPOST), createTransaction)
+router.put('/:id', authUser, editTransaction)
+router.delete('/:id', authUser, deleteTransaction)
 
-
-router.get('/', getTransaction)
-router.get('/:id', getTransactionById)
-router.post('/',validationMiddleware(transactionSchemaPOST), createTransaction)
-router.put('/:id', editTransaction)
-router.delete('/:id', deleteTransaction)
-
-
-module.exports = router;
+module.exports = router
