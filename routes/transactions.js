@@ -55,7 +55,7 @@ const router = express.Router()
 /**
  /
 * @swagger
-* /transaction:
+* /transactions:
 *  get:
 *    summary: returns the list of all transactions
 *    responses:
@@ -74,7 +74,7 @@ router.get('/', getTransaction)
  /**
  /
 * @swagger
-* /transaction/{id}:
+* /transactions/{id}:
 *  get:
 *    summary: Find transaction by ID
 *    parameters:
@@ -107,12 +107,61 @@ router.get('/:id', getTransactionById)
  /**
  /
 * @swagger
-* /transaction:
+* /transactions:
 *  post:
-*    summary: Find transaction by ID
+*    summary: create a new transaction 
 *    description: Add a new transaction
 *    requestBody:
-*            description: Create a new pet in the store
+*            description: Create a new transaction 
+*            content:
+*              application/json:
+*                schema:
+*                  $ref: '#/components/schemas/transactions'
+*              application/xml:
+*                schema:
+*                  $ref: '#/components/schemas/transactions'
+*              application/x-www-form-urlencoded:
+*                schema:
+*                  $ref: '#/components/schemas/transactions'
+*            required: true
+*    responses:
+*        '200':
+*          description: successfuly operation
+*          content:
+*            application/json:
+*              schema:
+*                $ref: '#/components/schemas/transactions'          
+*            application/xml:
+*              schema:
+*                $ref: '#/components/schemas/transactions'
+*        '400':
+*          description: Invalid ID user or ID category
+*        '404':
+*          description: not Found ID user or ID category
+*        '500':
+*          description: error of server
+*    security:
+*     - bearerAuth: []
+*/
+router.post('/', validationMiddleware(transactionSchemaPOST), createTransaction)
+
+ /**
+ /
+* @swagger
+* /transactions/{id}:
+*  put:
+*    summary:  Update an existing transaction 
+*    description: Update an existing transaction by Id
+*    parameters:
+*       - name: id
+*         in: path
+*         description: ID of transaction to return
+*         required: true
+*         schema:
+*           type: integer
+*           format: int64 
+*    requestBody:
+*            description: Create a new transaction 
 *            content:
 *              application/json:
 *                schema:
@@ -140,9 +189,45 @@ router.get('/:id', getTransactionById)
 *          description: transaction not found
 *        '500':
 *          description: error of server
+*    security:
+*     - bearerAuth: []
 */
-router.post('/', validationMiddleware(transactionSchemaPOST), createTransaction)
 router.put('/:id', editTransaction)
+
+ /**
+ /
+* @swagger
+* /transactions/{id}:
+*  delete:
+*    summary:  Deletes a transaction 
+*    description: Delete a transaction
+*    parameters:
+*       - name: id
+*         in: path
+*         description: ID of transaction to delete
+*         required: true
+*         schema:
+*           type: integer
+*           format: int64 
+*    responses:
+*        '200':
+*          description: successfuly operation
+*          content:
+*            application/json:
+*              schema:
+*                $ref: '#/components/schemas/transactions'          
+*            application/xml:
+*              schema:
+*                $ref: '#/components/schemas/transactions'
+*        '400':
+*          description: Invalid ID supplied
+*        '404':
+*          description: transaction not found
+*        '500':
+*          description: error of server
+*    security:
+*     - bearerAuth: []
+*/
 router.delete('/:id', deleteTransaction)
 
 module.exports = router
