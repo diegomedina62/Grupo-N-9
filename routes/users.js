@@ -127,7 +127,7 @@ router.post("/", validationMiddleware(userSchemaPOST), postUsers);
  *        - in: path
  *        name: id
  *        schema:
- *          type: string
+ *          type: integer
  *        required: true
  *        description: The user id
  *    requestBody:
@@ -148,6 +148,27 @@ router.post("/", validationMiddleware(userSchemaPOST), postUsers);
  */
 
 router.put("/:id", validationMiddleware(userSchemaPUT), putUsers);
+
+/**
+ * @swagger
+ *  /users/{id}:
+ *    delete:
+ *      summary: remove the users by id
+ *      tags: [users]
+ *      parameters:
+ *        - in: path
+ *        name: id
+ *        schema:
+ *          type: integer
+ *        required: true
+ *        description: The user id
+ *
+ *    responses:
+ *       200:
+ *          description: The user was deleted
+ *       404:
+ *          description: The user was not found
+ */
 router.delete("/:id", deleteUser);
 
 module.exports = router;
