@@ -6,6 +6,7 @@ const {
   editTransaction,
   deleteTransaction
 } = require('../controllers/transactions')
+const authUser = require('../middlewares/authUser')
 const validationMiddleware = require('../middlewares/ValidationMiddleware')
 const transactionSchemaPOST = require('../schemas/transactionSchema-POST')
 
