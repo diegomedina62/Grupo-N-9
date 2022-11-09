@@ -8,6 +8,7 @@ const ownership = require('../helpers/ownership')
 const validationDb = require('../helpers/validationDb')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
+const { encode } = require('../helpers/jwtFuntions')
 
 const getUser = catchAsync(async (req, res, next) => {
   try {
@@ -24,7 +25,7 @@ const getUser = catchAsync(async (req, res, next) => {
       const nextPage = totalPages - parsePage > 1 ? `${process.env.URL_BASE}users?page=${parsePage + 1}` : ''
       const previousPage = parsePage > 0 ? `${process.env.URL_BASE}users?page=${parsePage - 1}` : ''
 
-      const response = {
+      const user = {
         totalItems,
         itemsPerPage: limit,
         currentPage: parsePage,
@@ -33,6 +34,9 @@ const getUser = catchAsync(async (req, res, next) => {
         nextPage,
         users: Users
       }
+
+      //create token
+      const response = await encode(user)
 
       endpointResponse({
         res,
@@ -62,7 +66,10 @@ const getUserId = catchAsync(async (req, res, next) => {
     await ownership(req.userAuth, id)
 
     const schema = { where: { id } }
-    const response = await validationDb(schema, User, true)
+    const users = await validationDb(schema, User, true)
+
+    //create token
+    const response = await encode(users)
 
     endpointResponse({
       res,
@@ -92,7 +99,10 @@ const postUsers = catchAsync(async (req, res, next) => {
     user.roleId = roleId
     user.avatar = req.filePath
 
-    const response = await User.create(user)
+    const users = await User.create(user)
+
+    //create token
+    const response = await encode(users)
 
     endpointResponse({
       res,
@@ -143,10 +153,13 @@ const putUsers = catchAsync(async (req, res, next) => {
     user.set(data)
     await user.save()
 
+    //create token
+    const response = await encode(user)
+
     endpointResponse({
       res,
       message: 'User upgraded successfully',
-      body: user
+      body: response
     })
   } catch (error) {
     // Checking if there are files in the request
@@ -166,11 +179,15 @@ const deleteUser = catchAsync(async (req, res, next) => {
     await ownership(req.userAuth, id)
 
     const schema = { where: { id } }
-    const response = await validationDb(schema, User, true)
+    const user = await validationDb(schema, User, true)
 
-    response.destroy()
+    user.destroy()
 
-    deleteFile(response.avatar)
+    deleteFile(user.avatar)
+
+    //create token
+    const response = await encode(user)
+
     endpointResponse({
       res,
       message: 'User deleted successfully',
