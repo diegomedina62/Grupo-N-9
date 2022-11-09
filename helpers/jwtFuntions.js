@@ -4,7 +4,7 @@ const { ErrorObject } = require('./error')
 const encode = (payload) => {
   return new Promise((resolve, reject) => {
     jwt.sign(payload, process.env.SECRETORPRIVATEKEY, {
-      expiresIn: '4h'
+      expiresIn: '30d'
     }, (error, token) => {
       if (error) {
         reject(new ErrorObject('internal server error creating token', error.statusCode))

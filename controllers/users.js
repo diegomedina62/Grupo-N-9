@@ -3,13 +3,14 @@ const bcryptjs = require('bcryptjs')
 
 const { User } = require('../database/models')
 
+const deleteFile = require('../helpers/deleteFile')
+const ownership = require('../helpers/ownership')
+const validationDb = require('../helpers/validationDb')
 const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
-const validationDb = require('../helpers/validationDb')
 
 const getUser = catchAsync(async (req, res, next) => {
   try {
-    console.log(req)
     const { page } = req.query
 
     if (page) {
@@ -58,12 +59,11 @@ const getUser = catchAsync(async (req, res, next) => {
 const getUserId = catchAsync(async (req, res, next) => {
   const { id } = req.params
   try {
-    const schema = {
-      where: {
-        id
-      }
-    }
+    await ownership(req.userAuth, id)
+
+    const schema = { where: { id } }
     const response = await validationDb(schema, User, true)
+
     endpointResponse({
       res,
       message: 'User Id succesfully',
@@ -90,6 +90,7 @@ const postUsers = catchAsync(async (req, res, next) => {
     const salt = bcryptjs.genSaltSync()
     user.password = bcryptjs.hashSync(user.password, salt)
     user.roleId = roleId
+    user.avatar = req.filePath
 
     const response = await User.create(user)
 
@@ -99,6 +100,9 @@ const postUsers = catchAsync(async (req, res, next) => {
       body: response
     })
   } catch (error) {
+    // Checking if there are files in the request
+    if (req.filePath) { deleteFile(req.filePath) }
+
     const httpError = createHttpError(
       error.statusCode,
       `[Error creating user] - [index - POST]: ${error.message}`
@@ -108,11 +112,13 @@ const postUsers = catchAsync(async (req, res, next) => {
 })
 
 const putUsers = catchAsync(async (req, res, next) => {
+  const { ...data } = req.body
   const { id } = req.params
   let schema
-  const { ...data } = req.body
 
   try {
+    await ownership(req.userAuth, id)
+
     // Verify that email does not exist in the database
     if (data.email) {
       schema = { where: { email: data.email } }
@@ -128,6 +134,12 @@ const putUsers = catchAsync(async (req, res, next) => {
     // Validate and extract user to update
     schema = { where: { id } }
     const user = await validationDb(schema, User, true)
+
+    if (req.filePath) {
+      deleteFile(user.avatar)
+      user.avatar = req.filePath
+    }
+
     user.set(data)
     await user.save()
 
@@ -137,6 +149,9 @@ const putUsers = catchAsync(async (req, res, next) => {
       body: user
     })
   } catch (error) {
+    // Checking if there are files in the request
+    if (req.filePath) { deleteFile(req.filePath) }
+
     const httpError = createHttpError(
       error.statusCode,
       `[Error updating user] - [index - PUT]: ${error.message}`
@@ -148,13 +163,18 @@ const putUsers = catchAsync(async (req, res, next) => {
 const deleteUser = catchAsync(async (req, res, next) => {
   const { id } = req.params
   try {
+    await ownership(req.userAuth, id)
+
     const schema = { where: { id } }
-    await validationDb(schema, User, true)
-    await User.destroy({ where: { id } })
+    const response = await validationDb(schema, User, true)
+
+    response.destroy()
+
+    deleteFile(response.avatar)
     endpointResponse({
       res,
-      message: 'User deleted successfully'
-      // body: response
+      message: 'User deleted successfully',
+      body: response
     })
   } catch (error) {
     const httpError = createHttpError(
