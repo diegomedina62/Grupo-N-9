@@ -92,6 +92,29 @@ router.get("/", getUser);
  *            description: The user was not found
  */
 router.get("/:id", getUserId);
+
+/**
+ * @swagger
+ * /users:
+ *  post:
+ *     summary: Create a new user
+ *     tags: [users]
+ *     requestBody:
+ *        required: true
+ *        content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/users'
+ *     responses:
+ *          200:
+ *            description: The user was succesfully created
+ *            contents:
+ *              application/json:
+ *              schema:
+ *                $ref: '#/components/schemas/users'
+ *          500:
+ *            description: Some server
+ */
 router.post("/", validationMiddleware(userSchemaPOST), postUsers);
 router.put("/:id", validationMiddleware(userSchemaPUT), putUsers);
 router.delete("/:id", deleteUser);
