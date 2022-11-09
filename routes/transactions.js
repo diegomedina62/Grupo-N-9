@@ -63,6 +63,8 @@ const router = express.Router()
 *                type: array
 *                items:
 *                  $ref: '#/components/schemas/transactions'
+*    security:
+*     - bearerAuth: []
 */
 router.get('/', authUser, getTransaction)
 
@@ -94,9 +96,11 @@ router.get('/', authUser, getTransaction)
 *        '400':
 *          description: Invalid ID supplied
 *        '404':
-*          description: Pet not found
+*          description: transaction not found
 *        '500':
 *          description: error of server
+*    security:
+*     - bearerAuth: []
 */
 router.get('/:id', authUser, getTransactionById)
 
@@ -157,7 +161,7 @@ router.post('/', authUser, validationMiddleware(transactionSchemaPOST), createTr
 *           type: integer
 *           format: int64 
 *    requestBody:
-*            description: Create a new transaction 
+*            description: Update a new transaction 
 *            content:
 *              application/json:
 *                schema:
@@ -195,7 +199,7 @@ router.put('/:id', authUser, editTransaction)
 * @swagger
 * /transactions/{id}:
 *  delete:
-*    summary:  Deletes a transaction 
+*    summary:  Delete a transaction 
 *    description: Delete a transaction
 *    parameters:
 *       - name: id
