@@ -99,4 +99,31 @@ const editCategory = catchAsync(async (req, res, next) => {
   }
 })
 
-module.exports = { createCategory, getCategoryById, getCategories, editCategory }
+const deleteCategory = catchAsync(async (req, res, next) => {
+  const { id } = req.params
+  try {
+    const schema = {
+      where: {
+        id
+      }
+    }
+
+    const response = await validationDb(schema, Category, true)
+
+    response.destroy()
+
+    endpointResponse({
+      res,
+      message: 'Delete category succesfully',
+      body: response
+    })
+  } catch (error) {
+    const httpError = createHttpError(
+      error.statusCode,
+      `[Error deleting Category] - [index - DELETE]: ${error.message}`
+    )
+    next(httpError)
+  }
+})
+
+module.exports = { createCategory, getCategoryById, getCategories, editCategory, deleteCategory }
