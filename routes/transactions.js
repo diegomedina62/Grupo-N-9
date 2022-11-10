@@ -21,8 +21,8 @@ const router = express.Router()
  *      type: object
  *      requires:
  *        -amount
- *        -userId
- *        -categoryId
+ *        -user
+ *        -category
  *        -date
  *      properties:
  *        description:
@@ -31,10 +31,10 @@ const router = express.Router()
  *        amount:
  *          type: integer
  *          description: This is the amount of the transaction
- *        userId:
+ *        user:
  *          type: integer
  *          description: This is the user id of the transaction
- *        categoryId:
+ *        category:
  *          type: integer
  *          description: This is the category id of the transaction
  *        deletedAt:
@@ -54,6 +54,7 @@ const router = express.Router()
 * /transactions:
 *  get:
 *    summary: returns the list of all transactions
+*    tags: [transactions]
 *    responses:
 *      200:
 *         description: the list of transaction
@@ -63,6 +64,8 @@ const router = express.Router()
 *                type: array
 *                items:
 *                  $ref: '#/components/schemas/transactions'
+*    security:
+*     - bearerAuth: []
 */
 router.get('/', authUser, getTransaction)
 
@@ -73,6 +76,7 @@ router.get('/', authUser, getTransaction)
 * /transactions/{id}:
 *  get:
 *    summary: Find transaction by ID
+*    tags: [transactions]
 *    parameters:
 *       - name: id
 *         in: path
@@ -94,9 +98,11 @@ router.get('/', authUser, getTransaction)
 *        '400':
 *          description: Invalid ID supplied
 *        '404':
-*          description: Pet not found
+*          description: transaction not found
 *        '500':
 *          description: error of server
+*    security:
+*     - bearerAuth: []
 */
 router.get('/:id', authUser, getTransactionById)
 
@@ -106,6 +112,7 @@ router.get('/:id', authUser, getTransactionById)
 * /transactions:
 *  post:
 *    summary: create a new transaction 
+*    tags: [transactions]
 *    description: Add a new transaction
 *    requestBody:
 *            description: Create a new transaction 
@@ -146,7 +153,8 @@ router.post('/', authUser, validationMiddleware(transactionSchemaPOST), createTr
 * @swagger
 * /transactions/{id}:
 *  put:
-*    summary:  Update an existing transaction 
+*    summary:  Update an existing transaction
+*    tags: [transactions] 
 *    description: Update an existing transaction by Id
 *    parameters:
 *       - name: id
@@ -157,7 +165,7 @@ router.post('/', authUser, validationMiddleware(transactionSchemaPOST), createTr
 *           type: integer
 *           format: int64 
 *    requestBody:
-*            description: Create a new transaction 
+*            description: Update a new transaction 
 *            content:
 *              application/json:
 *                schema:
@@ -195,7 +203,8 @@ router.put('/:id', authUser, editTransaction)
 * @swagger
 * /transactions/{id}:
 *  delete:
-*    summary:  Deletes a transaction 
+*    summary:  Delete a transaction
+*    tags: [transactions] 
 *    description: Delete a transaction
 *    parameters:
 *       - name: id
