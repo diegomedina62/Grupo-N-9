@@ -18,12 +18,28 @@ suite("Tests for Categories Routes", function () {
     description: "updateCategory",
   };
   let categoryID;
+  let token;
+  before((done) => {
+    chai
+      .request(server)
+      .post("/auth/login")
+      .send({
+        email: "JamiaOrt@test.com",
+        password: "theCrud",
+      })
+      .end((err, res) => {
+        token = res.body.body.token;
+        console.log(token);
+        done();
+      });
+  });
 
   suite("Create categories: POST-route", function () {
     test("Succesfully create category", function (done) {
       chai
         .request(server)
         .post("/categories")
+        .set("x-access-token", token)
         .send(testReqBody)
         .end((err, res) => {
           categoryID = res.body.body.id;
@@ -39,6 +55,7 @@ suite("Tests for Categories Routes", function () {
       chai
         .request(server)
         .post("/categories")
+        .set("x-access-token", token)
         .send({})
         .end((err, res) => {
           assert.equal(res.status, 400);
@@ -53,6 +70,7 @@ suite("Tests for Categories Routes", function () {
       chai
         .request(server)
         .put(`/categories/${categoryID}`)
+        .set("x-access-token", token)
         .send(updateReqBody)
         .end((err, res) => {
           assert.equal(res.status, 200);
@@ -66,6 +84,7 @@ suite("Tests for Categories Routes", function () {
       chai
         .request(server)
         .put(`/categories/0`)
+        .set("x-access-token", token)
         .send(updateReqBody)
         .end((err, res) => {
           assert.equal(res.status, 404);
@@ -78,6 +97,7 @@ suite("Tests for Categories Routes", function () {
       chai
         .request(server)
         .get(`/categories`)
+        .set("x-access-token", token)
         .send(updateReqBody)
         .end((err, res) => {
           assert.equal(res.status, 200);
@@ -90,6 +110,7 @@ suite("Tests for Categories Routes", function () {
       chai
         .request(server)
         .get(`/categories/${categoryID}`)
+        .set("x-access-token", token)
         .send(updateReqBody)
         .end((err, res) => {
           assert.equal(res.status, 200);
@@ -101,7 +122,31 @@ suite("Tests for Categories Routes", function () {
       chai
         .request(server)
         .get(`/categories/0`)
+        .set("x-access-token", token)
         .send(updateReqBody)
+        .end((err, res) => {
+          assert.equal(res.status, 404);
+          done();
+        });
+    });
+  });
+  suite("Delete categories", function () {
+    test("succesfully delete category", function (done) {
+      chai
+        .request(server)
+        .delete(`/categories/${categoryID}`)
+        .set("x-access-token", token)
+        .end((err, res) => {
+          assert.equal(res.status, 200);
+          assert.equal(res.body.message, "Delete category succesfully");
+          done();
+        });
+    });
+    test("Trying to delete unexistent user", function (done) {
+      chai
+        .request(server)
+        .delete(`/categories/0`)
+        .set("x-access-token", token)
         .end((err, res) => {
           assert.equal(res.status, 404);
           done();
