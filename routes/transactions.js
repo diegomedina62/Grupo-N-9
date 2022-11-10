@@ -65,7 +65,7 @@ const router = express.Router()
 *                items:
 *                  $ref: '#/components/schemas/transactions'
 *    security:
-*     - bearerAuth: []
+*     - ApiKeyAuth: []
 */
 router.get('/', authUser, getTransaction)
 
@@ -84,7 +84,7 @@ router.get('/', authUser, getTransaction)
 *         required: true
 *         schema:
 *           type: integer
-*           format: int64 
+*           format: int64
 *    responses:
 *        '200':
 *          description: successfuly operation
@@ -102,7 +102,7 @@ router.get('/', authUser, getTransaction)
 *        '500':
 *          description: error of server
 *    security:
-*     - bearerAuth: []
+*     - ApiKeyAuth: []
 */
 router.get('/:id', authUser, getTransactionById)
 
@@ -144,7 +144,7 @@ router.get('/:id', authUser, getTransactionById)
 *        '500':
 *          description: error of server
 *    security:
-*     - bearerAuth: []
+*     - ApiKeyAuth: []
 */
 router.post('/', authUser, validationMiddleware(transactionSchemaPOST), createTransaction)
 
@@ -163,7 +163,7 @@ router.post('/', authUser, validationMiddleware(transactionSchemaPOST), createTr
 *         required: true
 *         schema:
 *           type: integer
-*           format: int64 
+*           format: int64
 *    requestBody:
 *            description: Update a new transaction 
 *            content:
@@ -194,7 +194,7 @@ router.post('/', authUser, validationMiddleware(transactionSchemaPOST), createTr
 *        '500':
 *          description: error of server
 *    security:
-*     - bearerAuth: []
+*     - ApiKeyAuth: []
 */
 router.put('/:id', authUser, editTransaction)
 
@@ -231,7 +231,7 @@ router.put('/:id', authUser, editTransaction)
 *        '500':
 *          description: error of server
 *    security:
-*     - bearerAuth: []
+*     - ApiKeyAuth: []
 */
 router.delete('/:id', authUser, deleteTransaction)
 

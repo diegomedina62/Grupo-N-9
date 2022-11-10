@@ -67,8 +67,8 @@ const router = express.Router();
  *                type: array
  *                items:
  *                  $ref: '#/components/schemas/users'
- *         security:
- *           - bearerAuth: []
+ *    security:
+ *     - ApiKeyAuth: []
  */
 router.get("/", authUser, getUser);
 
@@ -94,8 +94,8 @@ router.get("/", authUser, getUser);
  *                $ref: '#/components/schemas/users'
  *          404:
  *            description: The user was not found
- *          security:
- *           - bearerAuth: []
+ *    security:
+ *     - ApiKeyAuth: []
  */
 router.get("/:id", authUser, getUserId);
 
@@ -121,7 +121,7 @@ router.get("/:id", authUser, getUserId);
  *          500:
  *            description: Some server
  *          security:
- *           - bearerAuth: []
+ *           - ApiKeyAuth: []
  */
 router.post("/", authUser, validationMiddleware(userSchemaPOST), postUsers);
 
@@ -171,7 +171,7 @@ router.post("/", authUser, validationMiddleware(userSchemaPOST), postUsers);
 *        '500':
 *          description: error of server
 *    security:
-*     - bearerAuth: []
+*     - ApiKeyAuth: []
 */
 
 router.put("/:id", authUser, validationMiddleware(userSchemaPUT), putUsers);
@@ -209,7 +209,7 @@ router.put("/:id", authUser, validationMiddleware(userSchemaPUT), putUsers);
 *        '500':
 *          description: error of server
 *    security:
-*     - bearerAuth: []
+*     - ApiKeyAuth: []
 */
 router.delete("/:id", authUser, deleteUser);
 

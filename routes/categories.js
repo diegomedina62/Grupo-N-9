@@ -53,7 +53,7 @@ const router = Router()
 *                items:
 *                  $ref: '#/components/schemas/category'
 *    security:
-*     - bearerAuth: []
+*     - ApiKeyAuth: []
 */
 
 router.get('/', authUser, getCategories)
@@ -96,7 +96,7 @@ router.get('/', authUser, getCategories)
 *        '500':
 *          description: error of server
 *    security:
-*     - bearerAuth: []
+*     - ApiKeyAuth: []
 */
 
 router.post('/', authUser, validationMiddleware(categoriesSchemaPOST), createCategory)
@@ -115,7 +115,7 @@ router.post('/', authUser, validationMiddleware(categoriesSchemaPOST), createCat
 *         required: true
 *         schema:
 *           type: integer
-*           format: int64 
+*           format: int64
 *    responses:
 *        '200':
 *          description: successfuly operation
@@ -133,7 +133,7 @@ router.post('/', authUser, validationMiddleware(categoriesSchemaPOST), createCat
 *        '500':
 *          description: error of server
 *    security:
-*     - bearerAuth: []
+*     - ApiKeyAuth: []
 */
 router.get('/:id', authUser, getCategoryById)
 
@@ -152,7 +152,7 @@ router.get('/:id', authUser, getCategoryById)
 *         required: true
 *         schema:
 *           type: integer
-*           format: int64 
+*           format: int64
 *    requestBody:
 *            description: Update a category 
 *            content:
@@ -183,7 +183,7 @@ router.get('/:id', authUser, getCategoryById)
 *        '500':
 *          description: error of server
 *    security:
-*     - bearerAuth: []
+*     - ApiKeyAuth: []
 */
 router.put('/:id', authUser, editCategory)
 
@@ -202,7 +202,7 @@ router.put('/:id', authUser, editCategory)
 *         required: true
 *         schema:
 *           type: integer
-*           format: int64 
+*           format: int64
 *    responses:
 *        '200':
 *          description: successfuly operation
@@ -220,7 +220,7 @@ router.put('/:id', authUser, editCategory)
 *        '500':
 *          description: error of server
 *    security:
-*     - bearerAuth: []
+*     - ApiKeyAuth: []
 */
 router.delete('/:id', authUser, deleteCategory)
 

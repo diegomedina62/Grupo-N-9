@@ -16,9 +16,10 @@ const swaggerDefinition = {
   ],
   components: {
     securitySchemes: {
-      bearerAuth: {
-        type: "http",
-        scheme: "bearer",
+      ApiKeyAuth: {
+        type: "apiKey",
+        in: "header",
+        name: "x-access-token"
       },
     },
   },
