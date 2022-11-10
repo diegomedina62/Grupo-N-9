@@ -17,7 +17,7 @@ const upload = multer({
       const fileName = file.originalname.split(fileExtension)[0]
       const fileNameComplet = `${fileName}-${Date.now()}${fileExtension}`
 
-      req.avatar = path.join(__dirname, '../uploads/', fileNameComplet)
+      req.filePath = path.join(__dirname, '../uploads/', fileNameComplet)
 
       cb(null, fileNameComplet)
     }

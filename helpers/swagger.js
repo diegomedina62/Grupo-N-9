@@ -1,4 +1,5 @@
 const swaggerJSDoc = require("swagger-jsdoc");
+const path = require('path')
 
 // metadata info about API
 
