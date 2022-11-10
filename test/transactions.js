@@ -3,6 +3,7 @@ const chai = require("chai");
 const { assert } = require("chai");
 const server = require("../app");
 const { suite, test } = require("mocha");
+const { decoded } = require("../helpers/jwtFuntions");
 
 chai.use(chaiHTTP);
 
@@ -22,24 +23,44 @@ suite("Test on transaction routes", function () {
   let categoryID;
   let userID;
   let transactionID;
+  let token;
+  //obtener token
+  before((done) => {
+    chai
+      .request(server)
+      .post("/auth/login")
+      .send({
+        email: "JamiaOrt@test.com",
+        password: "theCrud",
+      })
+      .end((err, res) => {
+        token = res.body.body.token;
+        done();
+      });
+  });
 
+  //  crear category temporal para pruebas
   before((done) => {
     chai
       .request(server)
       .post("/categories")
+      .set("x-access-token", token)
       .send(categoryBody)
       .end((err, res) => {
         categoryID = res.body.body.id;
         done();
       });
   });
+  //crear user temporal para pruebas
   before((done) => {
     chai
       .request(server)
       .post("/users")
+      .set("x-access-token", token)
       .send(userBody)
       .end((err, res) => {
-        userID = res.body.body.id;
+        payload = decoded(res.body.body);
+        userID = payload.users.id;
         done();
       });
   });
@@ -49,18 +70,19 @@ suite("Test on transaction routes", function () {
       chai
         .request(server)
         .post("/transactions")
+        .set("x-access-token", token)
         .send({
           amount: 5000,
           date: "2022/10/28",
           user: userID,
           category: categoryID,
+          description: "testDescription",
         })
         .end((err, res) => {
-          transactionID = res.body.body.id;
+          payload = decoded(res.body.body);
+          transactionID = payload.createUser.id;
           assert.equal(res.status, 200);
           assert.equal(res.body.message, "Transaction created successfully");
-          assert.equal(res.body.body.amount, 5000);
-
           done();
         });
     });
@@ -68,6 +90,7 @@ suite("Test on transaction routes", function () {
       chai
         .request(server)
         .post("/transactions")
+        .set("x-access-token", token)
         .send({
           amount: 5000,
           date: "2022/10/28",
@@ -83,6 +106,7 @@ suite("Test on transaction routes", function () {
       chai
         .request(server)
         .post("/transactions")
+        .set("x-access-token", token)
         .send({
           amount: 5000,
           date: "2022/10/28",
@@ -98,6 +122,7 @@ suite("Test on transaction routes", function () {
       chai
         .request(server)
         .post("/transactions")
+        .set("x-access-token", token)
         .send({
           amount: "",
           date: "",
@@ -117,6 +142,7 @@ suite("Test on transaction routes", function () {
       chai
         .request(server)
         .put(`/transactions/${transactionID}`)
+        .set("x-access-token", token)
         .send({
           amount: 1,
           date: "2022/10/28",
@@ -133,6 +159,7 @@ suite("Test on transaction routes", function () {
       chai
         .request(server)
         .put(`/transactions/${transactionID}`)
+        .set("x-access-token", token)
         .send({
           amount: 5000,
           date: "2022/10/28",
@@ -148,6 +175,7 @@ suite("Test on transaction routes", function () {
       chai
         .request(server)
         .put(`/transactions/${transactionID}`)
+        .set("x-access-token", token)
         .send({
           amount: 5000,
           date: "2022/10/28",
@@ -163,6 +191,7 @@ suite("Test on transaction routes", function () {
       chai
         .request(server)
         .put(`/transactions/0`)
+        .set("x-access-token", token)
         .send({
           amount: 5000,
           date: "2022/10/28",
@@ -180,6 +209,7 @@ suite("Test on transaction routes", function () {
       chai
         .request(server)
         .get("/transactions")
+        .set("x-access-token", token)
         .end((err, res) => {
           assert.equal(res.status, 200);
           assert.equal(res.body.message, "Transactions retrieved successfully");
@@ -190,18 +220,20 @@ suite("Test on transaction routes", function () {
       chai
         .request(server)
         .get(`/transactions/${transactionID}`)
+        .set("x-access-token", token)
         .end((err, res) => {
           assert.equal(res.status, 200);
           assert.equal(res.body.message, "Transaction retrieved successfully");
-          assert.equal(res.body.body.id, transactionID);
           done();
         });
     });
     test("Trying to get unexistent transaction", function (done) {
       chai
         .request(server)
-        .get(`/transactions/${transactionID}`)
+        .get(`/transactions/0`)
+        .set("x-access-token", token)
         .end((err, res) => {
+          assert.equal(res.status, 404);
           done();
         });
     });
@@ -212,6 +244,7 @@ suite("Test on transaction routes", function () {
       chai
         .request(server)
         .delete(`/transactions/${transactionID}`)
+        .set("x-access-token", token)
         .send()
         .end((err, res) => {
           assert.equal(res.status, 200);
@@ -223,6 +256,7 @@ suite("Test on transaction routes", function () {
       chai
         .request(server)
         .delete(`/transactions/0`)
+        .set("x-access-token", token)
         .send()
         .end((err, res) => {
           assert.equal(res.status, 404);
