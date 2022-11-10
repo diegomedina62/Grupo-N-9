@@ -67,6 +67,8 @@ const router = express.Router();
  *                type: array
  *                items:
  *                  $ref: '#/components/schemas/users'
+ *         security:
+ *           - bearerAuth: []
  */
 router.get("/", authUser, getUser);
 
@@ -92,6 +94,8 @@ router.get("/", authUser, getUser);
  *                $ref: '#/components/schemas/users'
  *          404:
  *            description: The user was not found
+ *          security:
+ *           - bearerAuth: []
  */
 router.get("/:id", authUser, getUserId);
 
@@ -116,6 +120,8 @@ router.get("/:id", authUser, getUserId);
  *                $ref: '#/components/schemas/users'
  *          500:
  *            description: Some server
+ *          security:
+ *           - bearerAuth: []
  */
 router.post("/", authUser, validationMiddleware(userSchemaPOST), postUsers);
 
