@@ -1,19 +1,18 @@
-const express = require('express')
-const validationMiddleware = require('../middlewares/ValidationMiddleware')
-const userSchemaPOST = require('../schemas/userSchema-Post')
-const userSchemaPUT = require('../schemas/userSchema-PUT')
+const express = require("express");
+const validationMiddleware = require("../middlewares/ValidationMiddleware");
+const userSchemaPOST = require("../schemas/userSchema-Post");
+const userSchemaPUT = require("../schemas/userSchema-PUT");
 
 const {
   getUser,
   getUserId,
   postUsers,
   putUsers,
-  deleteUser
-} = require('../controllers/users')
-const authUser = require('../middlewares/authUser')
+  deleteUser,
+} = require("../controllers/users");
+const authUser = require("../middlewares/authUser");
 
-const router = express.Router()
-
+const router = express.Router();
 
 /**
  * @swagger
@@ -69,7 +68,7 @@ const router = express.Router()
  *                items:
  *                  $ref: '#/components/schemas/users'
  */
-router.get("/", getUser);
+router.get("/", authUser, getUser);
 
 /**
  * @swagger
@@ -94,7 +93,7 @@ router.get("/", getUser);
  *          404:
  *            description: The user was not found
  */
-router.get("/:id", getUserId);
+router.get("/:id", authUser, getUserId);
 
 /**
  * @swagger
@@ -118,7 +117,7 @@ router.get("/:id", getUserId);
  *          500:
  *            description: Some server
  */
-router.post("/", validationMiddleware(userSchemaPOST), postUsers);
+router.post("/", authUser, validationMiddleware(userSchemaPOST), postUsers);
 
 /**
  /
@@ -169,7 +168,7 @@ router.post("/", validationMiddleware(userSchemaPOST), postUsers);
 *     - bearerAuth: []
 */
 
-router.put("/:id", validationMiddleware(userSchemaPUT), putUsers);
+router.put("/:id", authUser, validationMiddleware(userSchemaPUT), putUsers);
 
 /**
  /
@@ -206,13 +205,6 @@ router.put("/:id", validationMiddleware(userSchemaPUT), putUsers);
 *    security:
 *     - bearerAuth: []
 */
+router.delete("/:id", authUser, deleteUser);
 
-
-router.get('/', authUser, getUser)
-router.get('/:id', authUser, getUserId)
-router.post('/', authUser, validationMiddleware(userSchemaPOST), postUsers)
-router.put('/:id', authUser, validationMiddleware(userSchemaPUT), putUsers)
-router.delete('/:id', authUser, deleteUser)
-
-
-module.exports = router
+module.exports = router;
