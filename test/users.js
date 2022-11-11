@@ -48,7 +48,6 @@ suite('Tests for Users Routes', function () {
         .set('x-access-token', token)
         .send(createBodyRequest)
         .end((err, res) => {
-          console.log({ response: res })
           payload = decoded(res.body.body)
           testUserID = payload.payload.id
           assert(res.status, 500)
@@ -118,7 +117,7 @@ suite('Tests for Users Routes', function () {
         .set('x-access-token', token)
         .send(updateBodyRequest)
         .end((err, res) => {
-          assert.equal(res.status, 404)
+          assert.equal(res.status, 400)
           done()
         })
     })

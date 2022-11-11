@@ -9,7 +9,7 @@ const getCategories = catchAsync(async (req, res, next) => {
     const response = await Category.findAll()
     endpointResponse({
       res,
-      message: 'Categorys retrieved successfully',
+      message: 'Categories retrieved successfully',
       body: response
     })
   } catch (error) {

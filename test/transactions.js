@@ -60,7 +60,7 @@ suite('Test on transaction routes', function () {
       .send(userBody)
       .end((err, res) => {
         payload = decoded(res.body.body)
-        userID = payload.users.id
+        userID = payload.payload.id
         done()
       })
   })
@@ -238,7 +238,6 @@ suite('Test on transaction routes', function () {
         })
     })
   })
-
   suite('Delete transaction DELETE routes', function () {
     test('Succesfully delete transactions', function (done) {
       chai
@@ -263,5 +262,29 @@ suite('Test on transaction routes', function () {
           done()
         })
     })
+  })
+  // Borrar usuario de prueba
+  after((done) => {
+    chai
+      .request(server)
+      .delete(`/users/${userID}`)
+      .set('x-access-token', token)
+      .send()
+      .end((err, res) => {
+        console.log('User testTrasactionUser@email.com DELETE successfully')
+        done()
+      })
+  })
+  // Borrar categoria de prueba
+  after((done) => {
+    chai
+      .request(server)
+      .delete(`/categories/${categoryID}`)
+      .set('x-access-token', token)
+      .send()
+      .end((err, res) => {
+        console.log('User testTrasactionUser@email.com DELETE successfully')
+        done()
+      })
   })
 })
