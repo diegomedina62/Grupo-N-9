@@ -7,6 +7,7 @@ const validationDb = require('../helpers/validationDb')
 const { catchAsync } = require('../helpers/catchAsync')
 const { endpointResponse } = require('../helpers/success')
 const { encode } = require('../helpers/jwtFuntions')
+const pagination = require('../helpers/pagination')
 
 const getTransaction = catchAsync(async (req, res, next) => {
   const { query, page = 0 } = req.query
@@ -32,27 +33,17 @@ const getTransaction = catchAsync(async (req, res, next) => {
       transactions = rows
     }
 
-    const totalPages = Math.ceil(totalItems / limit)
-    const nextPage = totalPages - parsePage > 1 ? `${process.env.URL_BASE}transactions?page=${parsePage + 1}` : ''
-    const previousPage = parsePage > 0 ? `${process.env.URL_BASE}transactions?page=${parsePage - 1}` : ''
-
-    const payload = {
-      totalItems,
-      itemsPerPage: limit,
-      currentPage: parsePage,
-      totalPages,
-      previousPage,
-      nextPage,
-      transactions
-    }
+    const pagingData = pagination(totalItems, limit, parsePage)
 
     // create token
+    const payload = transactions
     const response = await encode({ payload })
 
     endpointResponse({
       res,
       message: 'Transactions retrieved successfully',
-      body: response
+      body: response,
+      options: pagingData
     })
   } catch (error) {
     const httpError = createHttpError(
@@ -67,12 +58,13 @@ const getTransactionById = catchAsync(async (req, res, next) => {
   try {
     const { id } = req.params
     const schema = { where: { id } }
-    const transactions = await validationDb(schema, Transaction, true)
+    const transaction = await validationDb(schema, Transaction, true)
 
-    await ownership(req.userAuth, transactions.userId)
+    await ownership(req.userAuth, transaction.userId)
 
     // create token
-    const response = await encode({ transactions })
+    const payload = transaction
+    const response = await encode({ payload })
 
     endpointResponse({
       res,
@@ -109,7 +101,8 @@ const createTransaction = catchAsync(async (req, res, next) => {
     })
 
     // create token
-    const response = await encode({ createUser })
+    const payload = createUser
+    const response = await encode({ payload })
 
     endpointResponse({
       res,
@@ -155,7 +148,8 @@ const editTransaction = catchAsync(async (req, res, next) => {
     await transaction.save()
 
     // create token
-    const response = await encode({ transaction })
+    const payload = transaction
+    const response = await encode({ payload })
 
     // eslint-disable-next-line no-undef
     endpointResponse({
@@ -176,14 +170,15 @@ const deleteTransaction = catchAsync(async (req, res, next) => {
   const { id } = req.params
   try {
     const schema = { where: { id } }
-    const transactions = await validationDb(schema, Transaction, true)
+    const transaction = await validationDb(schema, Transaction, true)
 
-    await ownership(req.userAuth, transactions.userId)
+    await ownership(req.userAuth, transaction.userId)
 
-    transactions.destroy()
+    transaction.destroy()
 
     // create token
-    const response = await encode({ transactions })
+    const payload = transaction
+    const response = await encode({ payload })
 
     endpointResponse({
       res,
