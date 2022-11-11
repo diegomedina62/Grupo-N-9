@@ -15,9 +15,11 @@ const transactionSchemaPOST = checkSchema({
     errorMessage: "Enter valid Date in de YYYY/MM/DD format",
   },
   user: {
-    exists: { options: { checkFalsy: true } },
-    bail: true,
-    isInt: { options: { strictMode: true } },
+    isInt: {
+      if: (value) => {
+        return value !== undefined;
+      },
+    },
     errorMessage: "Enter Valid userID - Must provide an Integer ",
   },
   category: {
