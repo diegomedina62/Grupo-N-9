@@ -102,25 +102,25 @@ router.get('/:id', getUserId)
  * @swagger
  * /users:
  *  post:
- *     summary: Create a new user
- *     tags: [users]
- *     requestBody:
- *        required: true
- *        content:
- *           application/json:
- *             schema:
- *                $ref: '#/components/schemas/users'
- *     responses:
- *          200:
- *            description: The user was succesfully created
- *            contents:
- *              application/json:
- *              schema:
- *                $ref: '#/components/schemas/users'
- *          500:
- *            description: Some server
- *          security:
- *           - ApiKeyAuth: []
+ *    summary: Create a new user
+ *    tags: [users]
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/users'
+ *    responses:
+ *      200:
+ *        description: The user was succesfully created
+ *        contents:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/users'
+ *      500:
+ *        description: Some server
+ *    security:
+ *      - ApiKeyAuth: []
  */
 router.post('/', validationMiddleware(userSchemaPOST), postUsers)
 
