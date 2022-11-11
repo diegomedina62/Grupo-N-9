@@ -119,8 +119,8 @@ router.get('/:id', getUserId)
  *                $ref: '#/components/schemas/users'
  *          500:
  *            description: Some server
- *          security:
- *           - ApiKeyAuth: []
+ *     security:
+ *      - ApiKeyAuth: [] 
  */
 router.post('/', validationMiddleware(userSchemaPOST), postUsers)
 
