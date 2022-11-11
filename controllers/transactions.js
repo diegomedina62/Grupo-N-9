@@ -33,7 +33,7 @@ const getTransaction = catchAsync(async (req, res, next) => {
       transactions = rows
     }
 
-    const pagingData = pagination(totalItems, limit, parsePage)
+    const pagingData = pagination(totalItems, limit, parsePage, req)
 
     // create token
     const payload = transactions
@@ -83,6 +83,8 @@ const getTransactionById = catchAsync(async (req, res, next) => {
 const createTransaction = catchAsync(async (req, res, next) => {
   try {
     const { date, amount, user, category, description } = req.body
+
+    await ownership(req.userAuth, user)
 
     // found if the id user exist
     const schema = { where: { id: user } }

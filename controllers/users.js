@@ -20,7 +20,7 @@ const getUser = catchAsync(async (req, res, next) => {
 
     const { count: totalItems, rows: users } = await User.findAndCountAll({ limit, offset })
 
-    const pagingData = pagination(totalItems, limit, parsePage)
+    const pagingData = pagination(totalItems, limit, parsePage, req)
 
     // create token
     const payload = users
