@@ -1,3 +1,4 @@
+
 const chaiHTTP = require('chai-http')
 const chai = require('chai')
 const { assert } = require('chai')
@@ -8,8 +9,6 @@ const { decoded } = require('../helpers/jwtFuntions')
 chai.use(chaiHTTP)
 
 suite('Tests for Users Routes', function () {
-  let token
-
   const createBodyRequest = {
     firstName: 'userCreate',
     lastName: 'userCreate',
@@ -23,6 +22,9 @@ suite('Tests for Users Routes', function () {
     lastName: 'updatedLastname',
     password: 'passwordUpdate'
   }
+
+  let testUserID
+  let token
 
   before((done) => {
     chai
@@ -38,7 +40,6 @@ suite('Tests for Users Routes', function () {
       })
   })
 
-  let testUserID
   suite('create User ', function () {
     test('succesfull creation of user', function (done) {
       chai
@@ -47,8 +48,9 @@ suite('Tests for Users Routes', function () {
         .set('x-access-token', token)
         .send(createBodyRequest)
         .end((err, res) => {
+          console.log({ response: res })
           payload = decoded(res.body.body)
-          testUserID = payload.users.id
+          testUserID = payload.payload.id
           assert(res.status, 500)
           assert.equal(res.status, 200)
           assert.equal(res.body.message, 'User created successfully')
@@ -116,11 +118,12 @@ suite('Tests for Users Routes', function () {
         .set('x-access-token', token)
         .send(updateBodyRequest)
         .end((err, res) => {
-          assert.equal(res.status, 400)
+          assert.equal(res.status, 404)
           done()
         })
     })
   })
+
   suite('Get Users', function () {
     test('Get user by ID', function (done) {
       chai
@@ -156,6 +159,7 @@ suite('Tests for Users Routes', function () {
         })
     })
   })
+
   suite('Delete User', function () {
     test('succesfully delete User', function (done) {
       chai

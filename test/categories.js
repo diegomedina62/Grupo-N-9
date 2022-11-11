@@ -19,6 +19,7 @@ suite('Tests for Categories Routes', function () {
   }
   let categoryID
   let token
+
   before((done) => {
     chai
       .request(server)
@@ -29,13 +30,13 @@ suite('Tests for Categories Routes', function () {
       })
       .end((err, res) => {
         token = res.body.body.token
-        console.log(token)
         done()
       })
   })
 
   suite('Create categories: POST-route', function () {
     test('Succesfully create category', function (done) {
+      console.log({ token })
       chai
         .request(server)
         .post('/categories')
@@ -45,7 +46,7 @@ suite('Tests for Categories Routes', function () {
           categoryID = res.body.body.id
           assert.equal(res.status, 200)
           assert.hasAllKeys(res.body, ['status', 'code', 'message', 'body'])
-          assert.equal(res.body.message, 'Categorys retrieved successfully')
+          assert.equal(res.body.message, 'Category created successfully')
           assert.equal(res.body.body.name, 'testCategory')
           assert.equal(res.body.body.description, 'testCategory')
           done()

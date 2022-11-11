@@ -80,7 +80,7 @@ suite('Test on transaction routes', function () {
         })
         .end((err, res) => {
           payload = decoded(res.body.body)
-          transactionID = payload.newUser.id
+          transactionID = payload.payload.id
           assert.equal(res.status, 200)
           assert.equal(res.body.message, 'Transaction created successfully')
           done()
