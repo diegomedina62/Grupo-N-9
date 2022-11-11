@@ -27,9 +27,6 @@ const router = express.Router()
  *        -avatar
  *        -date
  *      properties:
- *        id:
- *          type: integer
- *          description: The auto-generated id of the user
  *        firstName:
  *          type: string
  *          description: This is the firstName of the user
@@ -119,8 +116,8 @@ router.get('/:id', getUserId)
  *                $ref: '#/components/schemas/users'
  *          500:
  *            description: Some server
- *          security:
- *           - ApiKeyAuth: []
+ *     security:
+ *      - ApiKeyAuth: []
  */
 router.post('/', validationMiddleware(userSchemaPOST), postUsers)
 
