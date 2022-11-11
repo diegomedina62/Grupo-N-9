@@ -92,7 +92,7 @@ const createTransaction = catchAsync(async (req, res, next) => {
     schema.where.id = category
     await validationDb(schema, Category, true)
 
-    const createUser = await Transaction.create({
+    const newUser = await Transaction.create({
       categoryId: category,
       userId: user,
       date,
@@ -101,7 +101,7 @@ const createTransaction = catchAsync(async (req, res, next) => {
     })
 
     // create token
-    const payload = createUser
+    const payload = newUser
     const response = await encode({ payload })
 
     endpointResponse({
