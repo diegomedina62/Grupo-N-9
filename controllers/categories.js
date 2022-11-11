@@ -9,13 +9,33 @@ const getCategories = catchAsync(async (req, res, next) => {
     const response = await Category.findAll()
     endpointResponse({
       res,
-      message: 'Get categories',
+      message: 'Categorys retrieved successfully',
       body: response
     })
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
       `[Error retrieving categories] - [index - POST]: ${error.message}`
+    )
+    next(httpError)
+  }
+})
+
+const getCategoryById = catchAsync(async (req, res, next) => {
+  const { id } = req.params
+  try {
+    const schema = { where: { id } }
+
+    const category = await validationDb(schema, Category, true)
+    endpointResponse({
+      res,
+      message: 'Category retrieved successfully',
+      body: category
+    })
+  } catch (error) {
+    const httpError = createHttpError(
+      error.statusCode,
+      `[Error retrieving categories] - [index - GET]: ${error.message}`
     )
     next(httpError)
   }
@@ -38,33 +58,13 @@ const createCategory = catchAsync(async (req, res, next) => {
 
     endpointResponse({
       res,
-      message: 'Create a new category',
+      message: 'Category created successfully',
       body: category
     })
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
         `[Error retrieving categories] - [index - POST]: ${error.message}`
-    )
-    next(httpError)
-  }
-})
-
-const getCategoryById = catchAsync(async (req, res, next) => {
-  try {
-    const { id } = req.params
-    const schema = { where: { id } }
-
-    const category = await validationDb(schema, Category, true)
-    endpointResponse({
-      res,
-      message: 'obtain category data',
-      body: category
-    })
-  } catch (error) {
-    const httpError = createHttpError(
-      error.statusCode,
-      `[Error retrieving categories] - [index - GET]: ${error.message}`
     )
     next(httpError)
   }
@@ -87,7 +87,7 @@ const editCategory = catchAsync(async (req, res, next) => {
   try {
     endpointResponse({
       res,
-      message: 'edit a category',
+      message: 'User updated successfully',
       body: category
     })
   } catch (error) {
@@ -102,19 +102,14 @@ const editCategory = catchAsync(async (req, res, next) => {
 const deleteCategory = catchAsync(async (req, res, next) => {
   const { id } = req.params
   try {
-    const schema = {
-      where: {
-        id
-      }
-    }
-
+    const schema = { where: { id } }
     const response = await validationDb(schema, Category, true)
 
     response.destroy()
 
     endpointResponse({
       res,
-      message: 'Delete category succesfully',
+      message: 'Category deleted successfully',
       body: response
     })
   } catch (error) {

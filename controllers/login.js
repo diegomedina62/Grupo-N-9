@@ -28,7 +28,7 @@ const postLogin = catchAsync(async (req, res, next) => {
 
     endpointResponse({
       res,
-      message: 'Post Login',
+      message: 'Login successful',
       body: response
     })
   } catch (error) {

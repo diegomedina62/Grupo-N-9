@@ -28,7 +28,7 @@ const getUser = catchAsync(async (req, res, next) => {
 
     endpointResponse({
       res,
-      message: 'All users',
+      message: 'Users retrieved successfully',
       body: response,
       options: pagingData
     })
@@ -55,7 +55,7 @@ const getUserId = catchAsync(async (req, res, next) => {
 
     endpointResponse({
       res,
-      message: 'User Id succesfully',
+      message: 'User retrieved successfully',
       body: response
     })
   } catch (error) {
@@ -89,7 +89,7 @@ const postUsers = catchAsync(async (req, res, next) => {
 
     endpointResponse({
       res,
-      message: 'User successfully created',
+      message: 'User created successfully',
       body: response
     })
   } catch (error) {
@@ -149,7 +149,7 @@ const putUsers = catchAsync(async (req, res, next) => {
 
     endpointResponse({
       res,
-      message: 'User upgraded successfully',
+      message: 'User updated successfully',
       body: response
     })
   } catch (error) {

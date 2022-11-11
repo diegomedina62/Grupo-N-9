@@ -182,7 +182,7 @@ const deleteTransaction = catchAsync(async (req, res, next) => {
 
     endpointResponse({
       res,
-      message: 'Delete transaction succesfully',
+      message: 'Transaction deleted successfully',
       body: response
     })
   } catch (error) {
