@@ -1,18 +1,17 @@
-const express = require("express");
-const validationMiddleware = require("../middlewares/ValidationMiddleware");
-const userSchemaPOST = require("../schemas/userSchema-Post");
-const userSchemaPUT = require("../schemas/userSchema-PUT");
+const express = require('express')
+const validationMiddleware = require('../middlewares/ValidationMiddleware')
+const userSchemaPOST = require('../schemas/userSchema-Post')
+const userSchemaPUT = require('../schemas/userSchema-PUT')
 
 const {
   getUser,
   getUserId,
   postUsers,
   putUsers,
-  deleteUser,
-} = require("../controllers/users");
-const authUser = require("../middlewares/authUser");
+  deleteUser
+} = require('../controllers/users')
 
-const router = express.Router();
+const router = express.Router()
 
 /**
  * @swagger
@@ -70,7 +69,7 @@ const router = express.Router();
  *    security:
  *     - ApiKeyAuth: []
  */
-router.get("/", authUser, getUser);
+router.get('/', getUser)
 
 /**
  * @swagger
@@ -97,7 +96,7 @@ router.get("/", authUser, getUser);
  *    security:
  *     - ApiKeyAuth: []
  */
-router.get("/:id", authUser, getUserId);
+router.get('/:id', getUserId)
 
 /**
  * @swagger
@@ -123,7 +122,7 @@ router.get("/:id", authUser, getUserId);
  *          security:
  *           - ApiKeyAuth: []
  */
-router.post("/", authUser, validationMiddleware(userSchemaPOST), postUsers);
+router.post('/', validationMiddleware(userSchemaPOST), postUsers)
 
 /**
  /
@@ -140,7 +139,7 @@ router.post("/", authUser, validationMiddleware(userSchemaPOST), postUsers);
 *         required: true
 *         schema:
 *           type: integer
-*           format: int64 
+*           format: int64
 *    requestBody:
 *            description: Update a users
 *            content:
@@ -160,7 +159,7 @@ router.post("/", authUser, validationMiddleware(userSchemaPOST), postUsers);
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/users'          
+*                $ref: '#/components/schemas/users'
 *            application/xml:
 *              schema:
 *                $ref: '#/components/schemas/users'
@@ -174,7 +173,7 @@ router.post("/", authUser, validationMiddleware(userSchemaPOST), postUsers);
 *     - ApiKeyAuth: []
 */
 
-router.put("/:id", authUser, validationMiddleware(userSchemaPUT), putUsers);
+router.put('/:id', validationMiddleware(userSchemaPUT), putUsers)
 
 /**
  /
@@ -191,14 +190,14 @@ router.put("/:id", authUser, validationMiddleware(userSchemaPUT), putUsers);
 *         required: true
 *         schema:
 *           type: integer
-*           format: int64 
+*           format: int64
 *    responses:
 *        '200':
 *          description: successfuly operation
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/users'          
+*                $ref: '#/components/schemas/users'
 *            application/xml:
 *              schema:
 *                $ref: '#/components/schemas/users'
@@ -211,6 +210,6 @@ router.put("/:id", authUser, validationMiddleware(userSchemaPUT), putUsers);
 *    security:
 *     - ApiKeyAuth: []
 */
-router.delete("/:id", authUser, deleteUser);
+router.delete('/:id', deleteUser)
 
-module.exports = router;
+module.exports = router

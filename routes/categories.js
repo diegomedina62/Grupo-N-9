@@ -7,7 +7,6 @@ const {
   editCategory,
   deleteCategory
 } = require('../controllers/categories')
-const authUser = require('../middlewares/authUser')
 const validationMiddleware = require('../middlewares/ValidationMiddleware')
 const categoriesSchemaPOST = require('../schemas/categoriesSchema-POST')
 
@@ -29,11 +28,11 @@ const router = Router()
  *          description: This is the description of the category
  *        name:
  *          type: string
- *          description: This is the name of the category      
+ *          description: This is the name of the category
  *        deletedAt:
  *          type: date
  *          description: This is the date of delete of the transaction
- * 
+ *
  */
 
 /**
@@ -56,18 +55,18 @@ const router = Router()
 *     - ApiKeyAuth: []
 */
 
-router.get('/', authUser, getCategories)
+router.get('/', getCategories)
 
- /**
+/**
  /
 * @swagger
 * /categories:
 *  post:
 *    summary: create a new category
-*    tags: [categories] 
+*    tags: [categories]
 *    description: Add a new category
 *    requestBody:
-*            description: Create a new category 
+*            description: Create a new category
 *            content:
 *              application/json:
 *                schema:
@@ -85,7 +84,7 @@ router.get('/', authUser, getCategories)
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/category'          
+*                $ref: '#/components/schemas/category'
 *            application/xml:
 *              schema:
 *                $ref: '#/components/schemas/category'
@@ -99,7 +98,7 @@ router.get('/', authUser, getCategories)
 *     - ApiKeyAuth: []
 */
 
-router.post('/', authUser, validationMiddleware(categoriesSchemaPOST), createCategory)
+router.post('/', validationMiddleware(categoriesSchemaPOST), createCategory)
 
 /**
  /
@@ -122,7 +121,7 @@ router.post('/', authUser, validationMiddleware(categoriesSchemaPOST), createCat
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/category'          
+*                $ref: '#/components/schemas/category'
 *            application/xml:
 *              schema:
 *                $ref: '#/components/schemas/category'
@@ -135,15 +134,15 @@ router.post('/', authUser, validationMiddleware(categoriesSchemaPOST), createCat
 *    security:
 *     - ApiKeyAuth: []
 */
-router.get('/:id', authUser, getCategoryById)
+router.get('/:id', getCategoryById)
 
- /**
+/**
  /
 * @swagger
 * /categories/{id}:
 *  put:
 *    summary:  Update an existing category
-*    tags: [categories] 
+*    tags: [categories]
 *    description: Update an existing category by Id
 *    parameters:
 *       - name: id
@@ -154,7 +153,7 @@ router.get('/:id', authUser, getCategoryById)
 *           type: integer
 *           format: int64
 *    requestBody:
-*            description: Update a category 
+*            description: Update a category
 *            content:
 *              application/json:
 *                schema:
@@ -172,7 +171,7 @@ router.get('/:id', authUser, getCategoryById)
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/category'          
+*                $ref: '#/components/schemas/category'
 *            application/xml:
 *              schema:
 *                $ref: '#/components/schemas/category'
@@ -185,7 +184,7 @@ router.get('/:id', authUser, getCategoryById)
 *    security:
 *     - ApiKeyAuth: []
 */
-router.put('/:id', authUser, editCategory)
+router.put('/:id', editCategory)
 
 /**
  /
@@ -193,7 +192,7 @@ router.put('/:id', authUser, editCategory)
 * /categories/{id}:
 *  delete:
 *    summary:  Delete a category
-*    tags: [categories] 
+*    tags: [categories]
 *    description: Delete a category
 *    parameters:
 *       - name: id
@@ -209,7 +208,7 @@ router.put('/:id', authUser, editCategory)
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/category'          
+*                $ref: '#/components/schemas/category'
 *            application/xml:
 *              schema:
 *                $ref: '#/components/schemas/category'
@@ -222,6 +221,6 @@ router.put('/:id', authUser, editCategory)
 *    security:
 *     - ApiKeyAuth: []
 */
-router.delete('/:id', authUser, deleteCategory)
+router.delete('/:id', deleteCategory)
 
 module.exports = router

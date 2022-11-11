@@ -5,11 +5,11 @@ const { User } = require('../database/models')
 
 const deleteFile = require('../helpers/deleteFile')
 const ownership = require('../helpers/ownership')
+const pagination = require('../helpers/pagination')
 const validationDb = require('../helpers/validationDb')
-const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
 const { encode } = require('../helpers/jwtFuntions')
-const pagination = require('../helpers/pagination')
+const { endpointResponse } = require('../helpers/success')
 
 const getUser = catchAsync(async (req, res, next) => {
   const { page = 0 } = req.query
@@ -71,6 +71,7 @@ const postUsers = catchAsync(async (req, res, next) => {
   const { ...data } = req.body
 
   try {
+    await ownership(req.userAuth, null)
     // Verify that email does not exist in the database
     const schema = { where: { email: data.email } }
     await validationDb(schema, User, false)

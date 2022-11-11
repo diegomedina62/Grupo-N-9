@@ -1,7 +1,9 @@
 const createHttpError = require('http-errors')
+
 const { Category } = require('../database/models')
-const { endpointResponse } = require('../helpers/success')
+
 const { catchAsync } = require('../helpers/catchAsync')
+const { endpointResponse } = require('../helpers/success')
 const validationDb = require('../helpers/validationDb')
 
 const getCategories = catchAsync(async (req, res, next) => {
@@ -74,13 +76,13 @@ const editCategory = catchAsync(async (req, res, next) => {
   const { id } = req.params
   const { name, description } = req.body
 
+  if (name) {
+    const schemaName = { where: { name } }
+    await validationDb(schemaName, Category, false)
+  }
   const schemaId = { where: { id } }
-  const schemaName = { where: { name } }
 
-  const [category] = await Promise.all([
-    validationDb(schemaId, Category, true),
-    validationDb(schemaName, Category, false)
-  ])
+  const category = await validationDb(schemaId, Category, true)
 
   await category.update({ name, description })
 

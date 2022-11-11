@@ -87,7 +87,7 @@ suite('Tests for Categories Routes', function () {
         .set('x-access-token', token)
         .send(updateReqBody)
         .end((err, res) => {
-          assert.equal(res.status, 404)
+          assert.equal(res.status, 400)
           done()
         })
     })

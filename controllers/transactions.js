@@ -3,11 +3,11 @@ const createHttpError = require('http-errors')
 const { Transaction, User, Category } = require('../database/models')
 
 const ownership = require('../helpers/ownership')
+const pagination = require('../helpers/pagination')
 const validationDb = require('../helpers/validationDb')
 const { catchAsync } = require('../helpers/catchAsync')
-const { endpointResponse } = require('../helpers/success')
 const { encode } = require('../helpers/jwtFuntions')
-const pagination = require('../helpers/pagination')
+const { endpointResponse } = require('../helpers/success')
 
 const getTransaction = catchAsync(async (req, res, next) => {
   const { query, page = 0 } = req.query
@@ -121,14 +121,18 @@ const createTransaction = catchAsync(async (req, res, next) => {
 })
 
 const editTransaction = catchAsync(async (req, res, next) => {
+  const { id } = req.params
   try {
     const { user, amount, category, date, description } = req.body
 
-    const { id } = req.params
+    await ownership(req.userAuth, user)
 
     // found if the id transaction exist
     const schema = { where: { id } }
     const transaction = await validationDb(schema, Transaction, true)
+
+    console.log(req.userAuth)
+    console.log(transaction.userId)
 
     await ownership(req.userAuth, transaction.userId)
 
