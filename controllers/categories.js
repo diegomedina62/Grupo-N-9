@@ -1,7 +1,9 @@
 const createHttpError = require('http-errors')
+
 const { Category } = require('../database/models')
-const { endpointResponse } = require('../helpers/success')
+
 const { catchAsync } = require('../helpers/catchAsync')
+const { endpointResponse } = require('../helpers/success')
 const validationDb = require('../helpers/validationDb')
 
 const getCategories = catchAsync(async (req, res, next) => {
@@ -9,13 +11,33 @@ const getCategories = catchAsync(async (req, res, next) => {
     const response = await Category.findAll()
     endpointResponse({
       res,
-      message: 'Get categories',
+      message: 'Categories retrieved successfully',
       body: response
     })
   } catch (error) {
     const httpError = createHttpError(
       error.statusCode,
       `[Error retrieving categories] - [index - POST]: ${error.message}`
+    )
+    next(httpError)
+  }
+})
+
+const getCategoryById = catchAsync(async (req, res, next) => {
+  const { id } = req.params
+  try {
+    const schema = { where: { id } }
+
+    const category = await validationDb(schema, Category, true)
+    endpointResponse({
+      res,
+      message: 'Category retrieved successfully',
+      body: category
+    })
+  } catch (error) {
+    const httpError = createHttpError(
+      error.statusCode,
+      `[Error retrieving categories] - [index - GET]: ${error.message}`
     )
     next(httpError)
   }
@@ -38,7 +60,7 @@ const createCategory = catchAsync(async (req, res, next) => {
 
     endpointResponse({
       res,
-      message: 'Create a new category',
+      message: 'Category created successfully',
       body: category
     })
   } catch (error) {
@@ -50,44 +72,24 @@ const createCategory = catchAsync(async (req, res, next) => {
   }
 })
 
-const getCategoryById = catchAsync(async (req, res, next) => {
-  try {
-    const { id } = req.params
-    const schema = { where: { id } }
-
-    const category = await validationDb(schema, Category, true)
-    endpointResponse({
-      res,
-      message: 'obtain category data',
-      body: category
-    })
-  } catch (error) {
-    const httpError = createHttpError(
-      error.statusCode,
-      `[Error retrieving categories] - [index - GET]: ${error.message}`
-    )
-    next(httpError)
-  }
-})
-
 const editCategory = catchAsync(async (req, res, next) => {
   const { id } = req.params
   const { name, description } = req.body
 
+  if (name) {
+    const schemaName = { where: { name } }
+    await validationDb(schemaName, Category, false)
+  }
   const schemaId = { where: { id } }
-  const schemaName = { where: { name } }
 
-  const [category] = await Promise.all([
-    validationDb(schemaId, Category, true),
-    validationDb(schemaName, Category, false)
-  ])
+  const category = await validationDb(schemaId, Category, true)
 
   await category.update({ name, description })
 
   try {
     endpointResponse({
       res,
-      message: 'edit a category',
+      message: 'User updated successfully',
       body: category
     })
   } catch (error) {
@@ -102,19 +104,14 @@ const editCategory = catchAsync(async (req, res, next) => {
 const deleteCategory = catchAsync(async (req, res, next) => {
   const { id } = req.params
   try {
-    const schema = {
-      where: {
-        id
-      }
-    }
-
+    const schema = { where: { id } }
     const response = await validationDb(schema, Category, true)
 
     response.destroy()
 
     endpointResponse({
       res,
-      message: 'Delete category succesfully',
+      message: 'Category deleted successfully',
       body: response
     })
   } catch (error) {

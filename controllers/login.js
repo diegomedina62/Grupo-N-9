@@ -4,9 +4,9 @@ const bcryptjs = require('bcryptjs')
 const { User } = require('../database/models')
 
 const validationDb = require('../helpers/validationDb')
-const { endpointResponse } = require('../helpers/success')
 const { catchAsync } = require('../helpers/catchAsync')
 const { encode } = require('../helpers/jwtFuntions')
+const { endpointResponse } = require('../helpers/success')
 const { ErrorObject } = require('../helpers/error')
 
 const postLogin = catchAsync(async (req, res, next) => {
@@ -28,7 +28,7 @@ const postLogin = catchAsync(async (req, res, next) => {
 
     endpointResponse({
       res,
-      message: 'Post Login',
+      message: 'Login successful',
       body: response
     })
   } catch (error) {

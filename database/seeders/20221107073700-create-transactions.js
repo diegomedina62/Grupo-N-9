@@ -17,7 +17,7 @@ module.exports = {
         amount: randomNumber(0, 10000),
         date: faker.date.past(5),
         userId: randomNumber(1, 20),
-        categoryId: randomNumber(1,2),
+        categoryId: randomNumber(1, 2),
         createdAt: new Date(),
         updatedAt: new Date()
       })

@@ -6,7 +6,6 @@ const {
   editTransaction,
   deleteTransaction
 } = require('../controllers/transactions')
-const authUser = require('../middlewares/authUser')
 const validationMiddleware = require('../middlewares/ValidationMiddleware')
 const transactionSchemaPOST = require('../schemas/transactionSchema-POST')
 
@@ -46,8 +45,6 @@ const router = express.Router()
  *
  */
 
-
-
 /**
  /
 * @swagger
@@ -67,10 +64,9 @@ const router = express.Router()
 *    security:
 *     - ApiKeyAuth: []
 */
-router.get('/', authUser, getTransaction)
+router.get('/', getTransaction)
 
-
- /**
+/**
  /
 * @swagger
 * /transactions/{id}:
@@ -91,7 +87,7 @@ router.get('/', authUser, getTransaction)
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/transactions'          
+*                $ref: '#/components/schemas/transactions'
 *            application/xml:
 *              schema:
 *                $ref: '#/components/schemas/transactions'
@@ -104,18 +100,18 @@ router.get('/', authUser, getTransaction)
 *    security:
 *     - ApiKeyAuth: []
 */
-router.get('/:id', authUser, getTransactionById)
+router.get('/:id', getTransactionById)
 
- /**
+/**
  /
 * @swagger
 * /transactions:
 *  post:
-*    summary: create a new transaction 
+*    summary: create a new transaction
 *    tags: [transactions]
 *    description: Add a new transaction
 *    requestBody:
-*            description: Create a new transaction 
+*            description: Create a new transaction
 *            content:
 *              application/json:
 *                schema:
@@ -133,7 +129,7 @@ router.get('/:id', authUser, getTransactionById)
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/transactions'          
+*                $ref: '#/components/schemas/transactions'
 *            application/xml:
 *              schema:
 *                $ref: '#/components/schemas/transactions'
@@ -146,15 +142,15 @@ router.get('/:id', authUser, getTransactionById)
 *    security:
 *     - ApiKeyAuth: []
 */
-router.post('/', authUser, validationMiddleware(transactionSchemaPOST), createTransaction)
+router.post('/', validationMiddleware(transactionSchemaPOST), createTransaction)
 
- /**
+/**
  /
 * @swagger
 * /transactions/{id}:
 *  put:
 *    summary:  Update an existing transaction
-*    tags: [transactions] 
+*    tags: [transactions]
 *    description: Update an existing transaction by Id
 *    parameters:
 *       - name: id
@@ -165,7 +161,7 @@ router.post('/', authUser, validationMiddleware(transactionSchemaPOST), createTr
 *           type: integer
 *           format: int64
 *    requestBody:
-*            description: Update a new transaction 
+*            description: Update a new transaction
 *            content:
 *              application/json:
 *                schema:
@@ -183,7 +179,7 @@ router.post('/', authUser, validationMiddleware(transactionSchemaPOST), createTr
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/transactions'          
+*                $ref: '#/components/schemas/transactions'
 *            application/xml:
 *              schema:
 *                $ref: '#/components/schemas/transactions'
@@ -196,15 +192,15 @@ router.post('/', authUser, validationMiddleware(transactionSchemaPOST), createTr
 *    security:
 *     - ApiKeyAuth: []
 */
-router.put('/:id', authUser, editTransaction)
+router.put('/:id', editTransaction)
 
- /**
+/**
  /
 * @swagger
 * /transactions/{id}:
 *  delete:
 *    summary:  Delete a transaction
-*    tags: [transactions] 
+*    tags: [transactions]
 *    description: Delete a transaction
 *    parameters:
 *       - name: id
@@ -213,14 +209,14 @@ router.put('/:id', authUser, editTransaction)
 *         required: true
 *         schema:
 *           type: integer
-*           format: int64 
+*           format: int64
 *    responses:
 *        '200':
 *          description: successfuly operation
 *          content:
 *            application/json:
 *              schema:
-*                $ref: '#/components/schemas/transactions'          
+*                $ref: '#/components/schemas/transactions'
 *            application/xml:
 *              schema:
 *                $ref: '#/components/schemas/transactions'
@@ -233,6 +229,6 @@ router.put('/:id', authUser, editTransaction)
 *    security:
 *     - ApiKeyAuth: []
 */
-router.delete('/:id', authUser, deleteTransaction)
+router.delete('/:id', deleteTransaction)
 
 module.exports = router
