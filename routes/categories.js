@@ -9,6 +9,7 @@ const {
 } = require('../controllers/categories')
 const validationMiddleware = require('../middlewares/ValidationMiddleware')
 const categoriesSchemaPOST = require('../schemas/categoriesSchema-POST')
+const IDinParamsSchema = require('../schemas/paramsID')
 
 const router = Router()
 
@@ -134,7 +135,7 @@ router.post('/', validationMiddleware(categoriesSchemaPOST), createCategory)
 *    security:
 *     - ApiKeyAuth: []
 */
-router.get('/:id', getCategoryById)
+router.get('/:id', validationMiddleware(IDinParamsSchema), getCategoryById)
 
 /**
  /
@@ -184,7 +185,7 @@ router.get('/:id', getCategoryById)
 *    security:
 *     - ApiKeyAuth: []
 */
-router.put('/:id', editCategory)
+router.put('/:id', validationMiddleware(IDinParamsSchema), editCategory)
 
 /**
  /
@@ -221,6 +222,6 @@ router.put('/:id', editCategory)
 *    security:
 *     - ApiKeyAuth: []
 */
-router.delete('/:id', deleteCategory)
+router.delete('/:id', validationMiddleware(IDinParamsSchema), deleteCategory)
 
 module.exports = router

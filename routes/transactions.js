@@ -7,6 +7,7 @@ const {
   deleteTransaction
 } = require('../controllers/transactions')
 const validationMiddleware = require('../middlewares/ValidationMiddleware')
+const IDinParamsSchema = require('../schemas/paramsID')
 const transactionSchemaPOST = require('../schemas/transactionSchema-POST')
 
 const router = express.Router()
@@ -100,7 +101,7 @@ router.get('/', getTransaction)
 *    security:
 *     - ApiKeyAuth: []
 */
-router.get('/:id', getTransactionById)
+router.get('/:id', validationMiddleware(IDinParamsSchema), getTransactionById)
 
 /**
  /
@@ -192,7 +193,7 @@ router.post('/', validationMiddleware(transactionSchemaPOST), createTransaction)
 *    security:
 *     - ApiKeyAuth: []
 */
-router.put('/:id', editTransaction)
+router.put('/:id', validationMiddleware(IDinParamsSchema), editTransaction)
 
 /**
  /
@@ -229,6 +230,6 @@ router.put('/:id', editTransaction)
 *    security:
 *     - ApiKeyAuth: []
 */
-router.delete('/:id', deleteTransaction)
+router.delete('/:id', validationMiddleware(IDinParamsSchema), deleteTransaction)
 
 module.exports = router

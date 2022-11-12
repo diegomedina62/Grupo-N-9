@@ -10,6 +10,7 @@ const {
   putUsers,
   deleteUser
 } = require('../controllers/users')
+const IDinParamsSchema = require('../schemas/paramsID')
 
 const router = express.Router()
 
@@ -93,7 +94,7 @@ router.get('/', getUser)
  *    security:
  *     - ApiKeyAuth: []
  */
-router.get('/:id', getUserId)
+router.get('/:id', validationMiddleware(IDinParamsSchema), getUserId)
 
 /**
  * @swagger
@@ -207,6 +208,6 @@ router.put('/:id', validationMiddleware(userSchemaPUT), putUsers)
 *    security:
 *     - ApiKeyAuth: []
 */
-router.delete('/:id', deleteUser)
+router.delete('/:id', validationMiddleware(IDinParamsSchema), deleteUser)
 
 module.exports = router
